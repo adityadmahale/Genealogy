@@ -33,22 +33,22 @@ public class MediaDatabaseAccess {
 	    return tags;
 	}
 	
-	// Returns all the tags present in the database
-		public Map<String, FileIdentifier> getFiles() throws SQLException {
-			
-			// Get the result set
-		    ResultSet rs = CommonQueries.getAllColumnsAndRows("media");
-		    
-		    // Iterate over the result set and store the values in the map
-		    // with the file location as the key and file identifier as the value
-		    Map<String, FileIdentifier> files = new HashMap<>();
-		    while(rs.next()) {
-		    	String file_location = rs.getString("file_location");
-		    	int media_id = rs.getInt("media_id");
-		    	files.put(file_location, new FileIdentifier(media_id, file_location));
-		    }
-		    
-		    return files;
+	// Returns all the files present in the database
+	public Map<String, FileIdentifier> getFiles() throws SQLException {
+		
+		// Get the result set
+	    ResultSet rs = CommonQueries.getAllColumnsAndRows("media");
+	    
+	    // Iterate over the result set and store the values in the map
+	    // with the file location as the key and file identifier as the value
+	    Map<String, FileIdentifier> files = new HashMap<>();
+	    while(rs.next()) {
+	    	String file_location = rs.getString("file_location");
+	    	int media_id = rs.getInt("media_id");
+	    	files.put(file_location, new FileIdentifier(media_id, file_location));
+	    }
+	    
+	    return files;
 	}
 	
 	// Inserts a tag into the database
