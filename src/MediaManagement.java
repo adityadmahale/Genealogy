@@ -1,4 +1,5 @@
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,8 +66,20 @@ public class MediaManagement {
 		return false;
 	}
 	
-	Boolean peopleInMedia(FileIdentifier fileIdentifier, List<PersonIdentity> people ) {
-		return false;
+	Boolean peopleInMedia(FileIdentifier fileIdentifier, List<PersonIdentity> people) {
+		// Handle invalid input for the fileIdentifier
+		if (fileIdentifier == null) {
+			throw new IllegalArgumentException();
+		}
+		
+		try {
+			// Link people and media
+			mediaAccess.linkPeopleAndMedia(fileIdentifier, people);
+		} catch (SQLException e) {
+			throw new IllegalStateException(e.getMessage());
+		}
+		
+		return true;
 	}
 	
 	Boolean tagMedia(FileIdentifier fileIdentifier, String tag) {

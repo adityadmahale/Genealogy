@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -82,5 +83,33 @@ public class MediaDatabaseAccess {
 		connection.setAutoCommit(true);
 	}
 	
+	// Links people and media
+	public void linkPeopleAndMedia(FileIdentifier fileIdentifier, List<PersonIdentity> people) throws SQLException {
+		// Get mediaId
+		int mediaId = fileIdentifier.getFileId();
+		
+		// Define values variable
+		String values = "";
+		
+		// Iterate over the people list to extract ids
+		for (var person: people) {
+			if (person == null) {
+				continue;
+			}
+			
+			// Append the values section of the query
+			values += "(" + person.getPersonId() + "," + mediaId + "),";
+		}
+		
+		// If no person exists, then return
+		if (values.equals("")) {
+			return;
+		}
+		
+		// Final query
+		String query = "INSERT INTO person_in_media(person_id, media_id) VALUES" + values.substring(0, values.length() - 1);
+		PreparedStatement ps = connection.prepareStatement(query);
+		ps.executeUpdate();
+	}
 	
 }
