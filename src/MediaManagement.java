@@ -14,12 +14,16 @@ public class MediaManagement {
 	// Map for storing tag and its corresponding tag id
 	private Map<String, Integer> tags;
 	
+	// Map for storing file location and its corresponding FileIdentifier
+	private Map<String, FileIdentifier> files;
+	
 	// Class for accessing media related database tables
 	private MediaDatabaseAccess mediaAccess = new MediaDatabaseAccess();
 	
 	public MediaManagement() {
 		// Retrieve all the tags in the database and store it in the tags map
 		try {
+			files = mediaAccess.getFiles();
 			tags = mediaAccess.getTags();
 		} catch (SQLException e) {
 			throw new IllegalStateException();
@@ -33,20 +37,28 @@ public class MediaManagement {
 			throw new IllegalArgumentException();
 		}
 		
+		// 
+		if (files.containsKey(fileLocation)) {
+			throw new IllegalArgumentException("File location already exists");
+		}
+		
 		// Create a FileIdentifier variable
-		FileIdentifier fileID;
+		FileIdentifier fileIdentifier;
 		try {
 			
 			// Insert the media into the media table
 			int id = mediaAccess.insertMedia(fileLocation);
 			
 			// Instantiate the file identifier class
-			fileID = new FileIdentifier(id, fileLocation);
+			fileIdentifier = new FileIdentifier(id, fileLocation);
+			
+			// Add the file location and identifier to the files map
+			files.put(fileLocation, fileIdentifier);
 		} catch (SQLException e) {
 			throw new IllegalStateException(e.getMessage());
 		}
 		
-		return fileID;
+		return fileIdentifier;
 	}
 	
 	Boolean recordMediaAttributes(FileIdentifier fileIdentifier, Map<String, String> attributes) {
