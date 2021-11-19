@@ -17,7 +17,7 @@ public class MediaManagement {
 	// Map for storing file location and its corresponding FileIdentifier
 	private Map<String, FileIdentifier> files;
 	
-	// Class for accessing media related database tables
+	// Object for accessing media related database tables
 	private MediaDatabaseAccess mediaAccess = new MediaDatabaseAccess();
 	
 	public MediaManagement() {
@@ -37,7 +37,7 @@ public class MediaManagement {
 			throw new IllegalArgumentException();
 		}
 		
-		// 
+		// If the file location already exists, then throw an exception
 		if (files.containsKey(fileLocation)) {
 			throw new IllegalArgumentException("File location already exists");
 		}
