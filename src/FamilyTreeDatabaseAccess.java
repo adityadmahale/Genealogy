@@ -5,6 +5,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FamilyTreeDatabaseAccess {
+	// Family tree related table names
+	private static final String TABLE_PERSON = "person";
+	private static final String TABLE_REFERENCE = "reference";
+	private static final String TABLE_NOTE = "note";
+	
+	// Family tree related column names
+	private static final String COLUMN_NAME = "name";
+	private static final String COLUMN_PERSON_ID = "person_id";
+	private static final String COLUMN_SOURCE = "source";
+	private static final String COLUMN_TEXT = "text";
+	
 	// Database connection object
 	private static Connection connection = DatabaseConnection.getConnection();
 	
@@ -12,14 +23,14 @@ public class FamilyTreeDatabaseAccess {
 	public Map<String, PersonIdentity> getPersons() throws SQLException {
 		
 		// Get the result set
-	    ResultSet rs = QueryUtility.getAllColumnsAndRows("person");
+	    ResultSet rs = QueryUtility.getAllColumnsAndRows(TABLE_PERSON);
 	    
 	    // Iterate over the result set and store the values in the map
 	    // with the person name as the key and person identity object as the value
 	    Map<String, PersonIdentity> persons = new HashMap<>();
 	    while(rs.next()) {
-	    	String name = rs.getString("name");
-	    	int person_id = rs.getInt("person_id");
+	    	String name = rs.getString(COLUMN_NAME);
+	    	int person_id = rs.getInt(COLUMN_PERSON_ID);
 	    	persons.put(name, new PersonIdentity(person_id, name));
 	    }
 	    
@@ -28,16 +39,16 @@ public class FamilyTreeDatabaseAccess {
 	
 	// Inserts a person into the database
 	public int insertPerson(String name) throws SQLException {
-		return QueryUtility.insertIntoOneColumnStringTable("person", "name", name);
+		return QueryUtility.insertIntoOneColumnStringTable(TABLE_PERSON, COLUMN_NAME, name);
 	}
 	
 	// Inserts a reference for a person
 	public void insertReference(int personId, String reference) throws SQLException {
-		QueryUtility.insertIntoTwoColumnsTable("reference", "source", reference, "person_id", personId);
+		QueryUtility.insertIntoTwoColumnsTable(TABLE_REFERENCE, COLUMN_SOURCE, reference, COLUMN_PERSON_ID, personId);
 	}
 	
 	// Inserts a note for a person
 	public void insertNote(int personId, String note) throws SQLException {
-		QueryUtility.insertIntoTwoColumnsTable("note", "text", note, "person_id", personId);
+		QueryUtility.insertIntoTwoColumnsTable(TABLE_NOTE, COLUMN_TEXT, note, COLUMN_PERSON_ID, personId);
 	}
 }

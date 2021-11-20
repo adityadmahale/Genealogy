@@ -9,26 +9,39 @@ import java.util.Map;
 
 
 public class MediaDatabaseAccess {
+	// Media related table names
+	private static final String TABLE_MEDIA = "media";
+	private static final String TABLE_TAG = "tag";
+	private static final String TABLE_MEDIA_TAG = "media_tag";
+	private static final String TABLE_PERSON_IN_MEDIA = "person_in_media";
+	
+	// Media related column names
+	private static final String COLUMN_FILE_LOCTION = "file_location";
+	private static final String COLUMN_NAME = "name";
+	private static final String COLUMN_TAG_ID = "tag_id";
+	private static final String COLUMN_MEDIA_ID = "media_id";
+	private static final String COLUMN_PERSON_ID = "person_id";
+	
 	
 	// Database connection object
 	private static Connection connection = DatabaseConnection.getConnection();
 	
 	// Inserts a media into the database
 	public int insertMedia(String fileLocation) throws SQLException {
-		return QueryUtility.insertIntoOneColumnStringTable("media", "file_location", fileLocation);
+		return QueryUtility.insertIntoOneColumnStringTable(TABLE_MEDIA, COLUMN_FILE_LOCTION, fileLocation);
 	}
 	
 	// Returns all the tags present in the database
 	public Map<String, Integer> getTags() throws SQLException {
 		
 		// Get the result set
-	    ResultSet rs = QueryUtility.getAllColumnsAndRows("tag");
+	    ResultSet rs = QueryUtility.getAllColumnsAndRows(TABLE_TAG);
 	    
 	    // Iterate over the result set and store the values in the map
 	    // with tag name as the key and tag id as the value
 	    Map<String, Integer> tags = new HashMap<>();
 	    while(rs.next()) {
-	    	tags.put(rs.getString("name"), rs.getInt("tag_id"));
+	    	tags.put(rs.getString(COLUMN_NAME), rs.getInt(COLUMN_TAG_ID));
 	    }
 	    
 	    return tags;
@@ -38,14 +51,14 @@ public class MediaDatabaseAccess {
 	public Map<String, FileIdentifier> getFiles() throws SQLException {
 		
 		// Get the result set
-	    ResultSet rs = QueryUtility.getAllColumnsAndRows("media");
+	    ResultSet rs = QueryUtility.getAllColumnsAndRows(TABLE_MEDIA);
 	    
 	    // Iterate over the result set and store the values in the map
 	    // with the file location as the key and file identifier as the value
 	    Map<String, FileIdentifier> files = new HashMap<>();
 	    while(rs.next()) {
-	    	String file_location = rs.getString("file_location");
-	    	int media_id = rs.getInt("media_id");
+	    	String file_location = rs.getString(COLUMN_FILE_LOCTION);
+	    	int media_id = rs.getInt(COLUMN_MEDIA_ID);
 	    	files.put(file_location, new FileIdentifier(media_id, file_location));
 	    }
 	    
@@ -54,7 +67,7 @@ public class MediaDatabaseAccess {
 	
 	// Inserts a tag into the database
 	private int insertTag(String name) throws SQLException {
-		return QueryUtility.insertIntoOneColumnStringTable("tag", "name", name);
+		return QueryUtility.insertIntoOneColumnStringTable(TABLE_TAG, COLUMN_NAME, name);
 	}
 	
 	// Links tag and media
@@ -70,7 +83,7 @@ public class MediaDatabaseAccess {
 			}
 			
 			// Insert values into the link table: media_tag
-			QueryUtility.insertIntoLinkTable("media_tag", tagId, mediaId);
+			QueryUtility.insertIntoLinkTable(TABLE_MEDIA_TAG, tagId, mediaId);
 			
 			// Complete the transaction
 	        connection.commit();
