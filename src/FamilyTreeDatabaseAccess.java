@@ -1,9 +1,7 @@
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class FamilyTreeDatabaseAccess {
@@ -31,5 +29,15 @@ public class FamilyTreeDatabaseAccess {
 	// Inserts a person into the database
 	public int insertPerson(String name) throws SQLException {
 		return CommonQueries.insertIntoOneColumnStringTable("person", "name", name);
+	}
+	
+	// Inserts a reference for a person
+	public void insertReference(int personId, String reference) throws SQLException {
+		CommonQueries.insertIntoTwoColumnsTable("reference", "source", reference, "person_id", personId);
+	}
+	
+	// Inserts a note for a person
+	public void insertNote(int personId, String note) throws SQLException {
+		CommonQueries.insertIntoTwoColumnsTable("note", "text", note, "person_id", personId);
 	}
 }

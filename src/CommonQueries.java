@@ -36,4 +36,13 @@ public class CommonQueries {
 	    rs.next();
 	    return rs.getInt(1);
 	}
+	
+	// Inserts a single row in a table with one string column and one integer column
+	public static void insertIntoTwoColumnsTable(String tableName, String columnName1, String columnValue1, String columnName2, int columnValue2) throws SQLException {
+		String query = "INSERT INTO " + tableName + "(" + columnName1 + "," + columnName2 + ")" + " VALUES (?, ?)";
+	    PreparedStatement ps = connection.prepareStatement(query);
+	    ps.setString(1, columnValue1);
+	    ps.setInt(2, columnValue2);
+	    ps.executeUpdate();
+	}
 }

@@ -5,6 +5,10 @@ public class FamilyTreeManagement {
 	
 	// Maximum string length of the tag name
 	private static final int MAX_PERSON_NAME_LENGTH = 255;
+	// Maximum string length of the reference
+	private static final int MAX_REFERENCE_LENGTH = 500;
+	// Maximum string length of the note
+	private static final int MAX_NOTE_LENGTH = 500;
 	
 	// Map for storing file location and its corresponding FileIdentifier
 	private Map<String, PersonIdentity> persons;
@@ -55,10 +59,38 @@ public class FamilyTreeManagement {
 	}
 	
 	Boolean recordReference(PersonIdentity person, String reference) {
+		// Handle invalid inputs
+		if (person == null || reference == null || reference == "" || reference.length() > MAX_REFERENCE_LENGTH) {
+			throw new IllegalArgumentException();
+		}
+		
+		try {
+			
+			// Insert reference for the given person
+			familyTreeAccess.insertReference(person.getPersonId(), reference);
+			
+		} catch (SQLException e) {
+			throw new IllegalStateException(e.getMessage());
+		}
+		
 		return true;
 	}
 	
 	Boolean recordNote(PersonIdentity person, String note) {
+		// Handle invalid inputs
+		if (person == null || note == null || note == "" || note.length() > MAX_NOTE_LENGTH) {
+			throw new IllegalArgumentException();
+		}
+		
+		try {
+			
+			// Insert note for the given person
+			familyTreeAccess.insertNote(person.getPersonId(), note);
+			
+		} catch (SQLException e) {
+			throw new IllegalStateException(e.getMessage());
+		}
+		
 		return true;
 	}
 	
