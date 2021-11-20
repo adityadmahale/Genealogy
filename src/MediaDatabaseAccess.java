@@ -111,7 +111,7 @@ public class MediaDatabaseAccess {
 			}
 			
 			// Append the values section of the query
-			values += "(" + person.getPersonId() + "," + mediaId + "),";
+			values += String.format("(%d,%d),", person.getPersonId(), mediaId);
 		}
 		
 		// If no person exists, then return
@@ -120,7 +120,7 @@ public class MediaDatabaseAccess {
 		}
 		
 		// Final query
-		String query = "INSERT INTO person_in_media(person_id, media_id) VALUES" + values.substring(0, values.length() - 1);
+		String query = String.format("INSERT INTO %s(%s, %s) VALUES%s", TABLE_PERSON_IN_MEDIA, COLUMN_PERSON_ID, COLUMN_MEDIA_ID, values.substring(0, values.length() - 1));
 		PreparedStatement ps = connection.prepareStatement(query);
 		ps.executeUpdate();
 	}
