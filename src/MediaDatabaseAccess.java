@@ -15,14 +15,14 @@ public class MediaDatabaseAccess {
 	
 	// Inserts a media into the database
 	public int insertMedia(String fileLocation) throws SQLException {
-		return CommonQueries.insertIntoOneColumnStringTable("media", "file_location", fileLocation);
+		return QueryUtility.insertIntoOneColumnStringTable("media", "file_location", fileLocation);
 	}
 	
 	// Returns all the tags present in the database
 	public Map<String, Integer> getTags() throws SQLException {
 		
 		// Get the result set
-	    ResultSet rs = CommonQueries.getAllColumnsAndRows("tag");
+	    ResultSet rs = QueryUtility.getAllColumnsAndRows("tag");
 	    
 	    // Iterate over the result set and store the values in the map
 	    // with tag name as the key and tag id as the value
@@ -38,7 +38,7 @@ public class MediaDatabaseAccess {
 	public Map<String, FileIdentifier> getFiles() throws SQLException {
 		
 		// Get the result set
-	    ResultSet rs = CommonQueries.getAllColumnsAndRows("media");
+	    ResultSet rs = QueryUtility.getAllColumnsAndRows("media");
 	    
 	    // Iterate over the result set and store the values in the map
 	    // with the file location as the key and file identifier as the value
@@ -54,7 +54,7 @@ public class MediaDatabaseAccess {
 	
 	// Inserts a tag into the database
 	private int insertTag(String name) throws SQLException {
-		return CommonQueries.insertIntoOneColumnStringTable("tag", "name", name);
+		return QueryUtility.insertIntoOneColumnStringTable("tag", "name", name);
 	}
 	
 	// Links tag and media
@@ -70,7 +70,7 @@ public class MediaDatabaseAccess {
 			}
 			
 			// Insert values into the link table: media_tag
-			CommonQueries.insertIntoLinkTable("media_tag", tagId, mediaId);
+			QueryUtility.insertIntoLinkTable("media_tag", tagId, mediaId);
 			
 			// Complete the transaction
 	        connection.commit();

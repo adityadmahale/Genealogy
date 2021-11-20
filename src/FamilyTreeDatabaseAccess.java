@@ -12,7 +12,7 @@ public class FamilyTreeDatabaseAccess {
 	public Map<String, PersonIdentity> getPersons() throws SQLException {
 		
 		// Get the result set
-	    ResultSet rs = CommonQueries.getAllColumnsAndRows("person");
+	    ResultSet rs = QueryUtility.getAllColumnsAndRows("person");
 	    
 	    // Iterate over the result set and store the values in the map
 	    // with the person name as the key and person identity object as the value
@@ -28,16 +28,16 @@ public class FamilyTreeDatabaseAccess {
 	
 	// Inserts a person into the database
 	public int insertPerson(String name) throws SQLException {
-		return CommonQueries.insertIntoOneColumnStringTable("person", "name", name);
+		return QueryUtility.insertIntoOneColumnStringTable("person", "name", name);
 	}
 	
 	// Inserts a reference for a person
 	public void insertReference(int personId, String reference) throws SQLException {
-		CommonQueries.insertIntoTwoColumnsTable("reference", "source", reference, "person_id", personId);
+		QueryUtility.insertIntoTwoColumnsTable("reference", "source", reference, "person_id", personId);
 	}
 	
 	// Inserts a note for a person
 	public void insertNote(int personId, String note) throws SQLException {
-		CommonQueries.insertIntoTwoColumnsTable("note", "text", note, "person_id", personId);
+		QueryUtility.insertIntoTwoColumnsTable("note", "text", note, "person_id", personId);
 	}
 }

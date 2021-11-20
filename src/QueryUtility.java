@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class CommonQueries {
+public class QueryUtility {
 	private static Connection connection = DatabaseConnection.getConnection();
 	
 	// Inserts two integer values in a link table
