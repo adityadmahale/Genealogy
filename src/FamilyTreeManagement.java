@@ -1,4 +1,5 @@
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class FamilyTreeManagement {
@@ -10,15 +11,17 @@ public class FamilyTreeManagement {
 	// Maximum string length of the note
 	private static final int MAX_NOTE_LENGTH = 500;
 	
-	// Map for storing file location and its corresponding FileIdentifier
-	private Map<String, PersonIdentity> persons;
+	// Map for storing name and its corresponding PersonIdentity
+	private Map<String, PersonIdentity> persons = new HashMap<>();
+	// Map for storing id and its corresponding PersonIdentity
+	private Map<Integer, PersonIdentity> personIds = new HashMap<>();
 	
 	// Object for accessing family tree related database tables
 	private FamilyTreeDatabaseAccess familyTreeAccess = new FamilyTreeDatabaseAccess();
 	
 	public FamilyTreeManagement() {
 		try {
-			persons = familyTreeAccess.getPersons();
+			familyTreeAccess.loadMaps(persons, personIds);
 		} catch (SQLException e) {
 			throw new IllegalStateException();
 		}
@@ -30,23 +33,24 @@ public class FamilyTreeManagement {
 			throw new IllegalArgumentException();
 		}
 		
-		// If the file location already exists, then throw an exception
+		// If the name already exists, then throw an exception
 		if (persons.containsKey(name)) {
 			throw new IllegalArgumentException("Name already exists");
 		}
 		
-		// Create a FileIdentifier variable
+		// Create a PersonIdentity variable
 		PersonIdentity personIdentity;
 		try {
 			
-			// Insert the media into the media table
+			// Insert the person into the person table
 			int id = familyTreeAccess.insertPerson(name);
 			
-			// Instantiate the file identifier class
+			// Instantiate the PersonIdentity class
 			personIdentity = new PersonIdentity(id, name);
 			
-			// Add the file location and identifier to the files map
+			// Add the name and person identity object to the persons map
 			persons.put(name, personIdentity);
+			personIds.put(id, personIdentity);
 		} catch (SQLException e) {
 			throw new IllegalStateException(e.getMessage());
 		}

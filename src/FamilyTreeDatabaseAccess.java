@@ -20,21 +20,20 @@ public class FamilyTreeDatabaseAccess {
 	private static Connection connection = DatabaseConnection.getConnection();
 	
 	// Returns all the persons present in the database
-	public Map<String, PersonIdentity> getPersons() throws SQLException {
+	public void loadMaps(Map<String, PersonIdentity> persons, Map<Integer, PersonIdentity> personIds) throws SQLException {
 		
 		// Get the result set
 	    ResultSet rs = QueryUtility.getAllColumnsAndRows(TABLE_PERSON);
 	    
 	    // Iterate over the result set and store the values in the map
 	    // with the person name as the key and person identity object as the value
-	    Map<String, PersonIdentity> persons = new HashMap<>();
 	    while(rs.next()) {
 	    	String name = rs.getString(COLUMN_NAME);
 	    	int person_id = rs.getInt(COLUMN_PERSON_ID);
-	    	persons.put(name, new PersonIdentity(person_id, name));
+	    	PersonIdentity personIdentity = new PersonIdentity(person_id, name);
+	    	persons.put(name, personIdentity);
+	    	personIds.put(person_id, personIdentity);
 	    }
-	    
-	    return persons;
 	}
 	
 	// Inserts a person into the database
