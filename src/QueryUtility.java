@@ -45,4 +45,11 @@ public class QueryUtility {
 	    ps.setInt(2, columnValue2);
 	    ps.executeUpdate();
 	}
+	
+	// Inserts two rows symmetrically - integers
+	public static void insertSymmetricIntValuesIntoTable(String tableName, int personId1, int personId2) throws SQLException {
+		String query = String.format("INSERT INTO %s VALUES (%d, %d), (%d, %d)", tableName, personId1, personId2, personId2, personId1);
+	    PreparedStatement ps = connection.prepareStatement(query);
+	    ps.executeUpdate();
+	}
 }

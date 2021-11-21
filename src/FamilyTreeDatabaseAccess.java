@@ -3,16 +3,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class FamilyTreeDatabaseAccess {
 	// Family tree related table names
 	private static final String TABLE_PERSON = "person";
 	private static final String TABLE_REFERENCE = "reference";
 	private static final String TABLE_NOTE = "note";
+	private static final String TABLE_PARTNER = "partner";
 	
 	// Family tree related column names
 	private static final String COLUMN_NAME = "name";
 	private static final String COLUMN_PERSON_ID = "person_id";
+	private static final String COLUMN_PARTNER_ID = "partner_id";
 	private static final String COLUMN_SOURCE = "source";
 	private static final String COLUMN_TEXT = "text";
 	
@@ -20,7 +23,7 @@ public class FamilyTreeDatabaseAccess {
 	private static Connection connection = DatabaseConnection.getConnection();
 	
 	// Returns all the persons present in the database
-	public void loadMaps(Map<String, PersonIdentity> persons, Map<Integer, PersonIdentity> personIds) throws SQLException {
+	public void loadPersons(Map<String, PersonIdentity> persons, Map<Integer, PersonIdentity> personIds, Set<PersonIdentity> roots) throws SQLException {
 		
 		// Get the result set
 	    ResultSet rs = QueryUtility.getAllColumnsAndRows(TABLE_PERSON);
@@ -33,6 +36,31 @@ public class FamilyTreeDatabaseAccess {
 	    	PersonIdentity personIdentity = new PersonIdentity(person_id, name);
 	    	persons.put(name, personIdentity);
 	    	personIds.put(person_id, personIdentity);
+	    	roots.add(personIdentity);
+	    }
+	}
+	
+	// Load partnering relationships
+	public void loadPartneringRelationships(Set<PersonIdentity> partnered, Map<Integer, PersonIdentity> personIds) throws SQLException {
+		
+		// Get the result set
+	    ResultSet rs = QueryUtility.getAllColumnsAndRows(TABLE_PARTNER);
+	    
+	    // Iterate over the result set and store the values in the partnered set
+	    while(rs.next()) {
+	    	// Get row values
+	    	int person_id = rs.getInt(COLUMN_PERSON_ID);
+	    	int partner_id = rs.getInt(COLUMN_PARTNER_ID);
+	    	
+	    	// Get the PersonIdentity objects for partners
+	    	PersonIdentity personIdentity1 = personIds.get(person_id);
+	    	PersonIdentity personIdentity2 = personIds.get(partner_id);
+	    	
+	    	// Add the person to the partnered set
+	    	partnered.add(personIdentity1);
+	    	
+	    	// Set the partner in the PersonIdentity object
+	    	personIdentity1.setPartner(personIdentity2);
 	    }
 	}
 	
@@ -49,5 +77,10 @@ public class FamilyTreeDatabaseAccess {
 	// Inserts a note for a person
 	public void insertNote(int personId, String note) throws SQLException {
 		QueryUtility.insertIntoTwoColumnsTable(TABLE_NOTE, COLUMN_TEXT, note, COLUMN_PERSON_ID, personId);
+	}
+	
+	// Inserts a note for a person
+	public void insertPartneringRelation(int personId1, int personId2) throws SQLException {
+		QueryUtility.insertSymmetricIntValuesIntoTable(TABLE_PARTNER, personId1, personId2);
 	}
 }

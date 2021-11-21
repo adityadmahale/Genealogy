@@ -20,6 +20,8 @@ public class FamilyTreeManagement {
 	
 	// Set for storing roots of the family tree
 	private Set<PersonIdentity> roots = new HashSet<>();
+	// Set for storing partners
+	private Set<PersonIdentity> partnered = new HashSet<>();
 	
 	
 	// Object for accessing family tree related database tables
@@ -27,7 +29,8 @@ public class FamilyTreeManagement {
 	
 	public FamilyTreeManagement() {
 		try {
-			familyTreeAccess.loadMaps(persons, personIds);
+			familyTreeAccess.loadPersons(persons, personIds, roots);
+			familyTreeAccess.loadPartneringRelationships(partnered, personIds);
 		} catch (SQLException e) {
 			throw new IllegalStateException();
 		}
@@ -110,6 +113,33 @@ public class FamilyTreeManagement {
 	}
 	
 	Boolean recordPartnering(PersonIdentity partner1, PersonIdentity partner2) {
+		if (partner1 == null || partner2 == null) {
+			throw new IllegalArgumentException();
+		}
+		
+		if (partner1 == partner2) {
+			throw new IllegalArgumentException("Cannot partner the same person");
+		}
+		
+		if (partnered.contains(partner1) || partnered.contains(partner2)) {
+			throw new IllegalArgumentException("Partnering already exists for one of the persons/both the persons");
+		}
+		
+		try {
+			// Add partnering relationship in the database
+			familyTreeAccess.insertPartneringRelation(partner1.getPersonId(), partner2.getPersonId());
+		} catch (SQLException e) {
+			throw new IllegalStateException(e.getMessage());
+		}
+		
+		// Add both the partners in the partnered set
+		partnered.add(partner1);
+		partnered.add(partner2);
+		
+		// Set partners for both persons in the PersonIdentity object
+		partner1.setPartner(partner2);
+		partner2.setPartner(partner1);
+		
 		return true;
 	}
 	
