@@ -1,6 +1,8 @@
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class FamilyTreeManagement {
 	
@@ -15,6 +17,10 @@ public class FamilyTreeManagement {
 	private Map<String, PersonIdentity> persons = new HashMap<>();
 	// Map for storing id and its corresponding PersonIdentity
 	private Map<Integer, PersonIdentity> personIds = new HashMap<>();
+	
+	// Set for storing roots of the family tree
+	private Set<PersonIdentity> roots = new HashSet<>();
+	
 	
 	// Object for accessing family tree related database tables
 	private FamilyTreeDatabaseAccess familyTreeAccess = new FamilyTreeDatabaseAccess();
@@ -51,6 +57,7 @@ public class FamilyTreeManagement {
 			// Add the name and person identity object to the persons map
 			persons.put(name, personIdentity);
 			personIds.put(id, personIdentity);
+			roots.add(personIdentity);
 		} catch (SQLException e) {
 			throw new IllegalStateException(e.getMessage());
 		}
