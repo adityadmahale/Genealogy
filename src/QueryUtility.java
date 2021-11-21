@@ -52,4 +52,11 @@ public class QueryUtility {
 	    PreparedStatement ps = connection.prepareStatement(query);
 	    ps.executeUpdate();
 	}
+	
+	// Delete two rows symmetrically - integers
+	public static void deleteSymmetricIntValuesFromTable(String tableName, String columnName, int personId1, int personId2) throws SQLException {
+		String query = String.format("DELETE FROM %s WHERE %s IN (%d, %d)", tableName, columnName, personId1, personId2);
+	    PreparedStatement ps = connection.prepareStatement(query);
+	    ps.executeUpdate();
+	}
 }

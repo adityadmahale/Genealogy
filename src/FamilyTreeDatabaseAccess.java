@@ -83,4 +83,8 @@ public class FamilyTreeDatabaseAccess {
 	public void insertPartneringRelation(int personId1, int personId2) throws SQLException {
 		QueryUtility.insertSymmetricIntValuesIntoTable(TABLE_PARTNER, personId1, personId2);
 	}
+	
+	public void dissolvePartneringRelation(int personId1, int personId2) throws SQLException {
+		QueryUtility.deleteSymmetricIntValuesFromTable(TABLE_PARTNER, COLUMN_PERSON_ID, personId1, personId2);
+	}
 }

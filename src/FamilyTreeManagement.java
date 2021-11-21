@@ -68,11 +68,11 @@ public class FamilyTreeManagement {
 		return personIdentity;
 	}
 	
-	Boolean recordAttributes(PersonIdentity person, Map<String, String> attributes) {
+	public Boolean recordAttributes(PersonIdentity person, Map<String, String> attributes) {
 		return true;
 	}
 	
-	Boolean recordReference(PersonIdentity person, String reference) {
+	public Boolean recordReference(PersonIdentity person, String reference) {
 		// Handle invalid inputs
 		if (person == null || reference == null || reference == "" || reference.length() > MAX_REFERENCE_LENGTH) {
 			throw new IllegalArgumentException();
@@ -90,7 +90,7 @@ public class FamilyTreeManagement {
 		return true;
 	}
 	
-	Boolean recordNote(PersonIdentity person, String note) {
+	public Boolean recordNote(PersonIdentity person, String note) {
 		// Handle invalid inputs
 		if (person == null || note == null || note == "" || note.length() > MAX_NOTE_LENGTH) {
 			throw new IllegalArgumentException();
@@ -108,11 +108,11 @@ public class FamilyTreeManagement {
 		return true;
 	}
 	
-	Boolean recordChild(PersonIdentity parent, PersonIdentity child) {
+	public Boolean recordChild(PersonIdentity parent, PersonIdentity child) {
 		return true;
 	}
 	
-	Boolean recordPartnering(PersonIdentity partner1, PersonIdentity partner2) {
+	public Boolean recordPartnering(PersonIdentity partner1, PersonIdentity partner2) {
 		if (partner1 == null || partner2 == null) {
 			throw new IllegalArgumentException();
 		}
@@ -143,7 +143,41 @@ public class FamilyTreeManagement {
 		return true;
 	}
 	
-	Boolean recordDissolution(PersonIdentity partner1, PersonIdentity partner2) {
+	public Boolean recordDissolution(PersonIdentity partner1, PersonIdentity partner2) {
+		if (partner1 == null || partner2 == null) {
+			throw new IllegalArgumentException();
+		}
+		
+		if (partner1 == partner2) {
+			throw new IllegalArgumentException("Cannot perform dissolution between the same person");
+		}
+		
+		if (!arePartners(partner1, partner2)) {
+			throw new IllegalArgumentException("Partnering does not exist between individuals");
+		}
+		
+		try {
+			// Add partnering relationship in the database
+			familyTreeAccess.dissolvePartneringRelation(partner1.getPersonId(), partner2.getPersonId());
+		} catch (SQLException e) {
+			throw new IllegalStateException(e.getMessage());
+		}
+		
+		// Remove both the persons from the partnered set
+		partnered.remove(partner1);
+		partnered.remove(partner2);
+		
+		// Set partners as null for both the persons in the PersonIdentity object
+		partner1.setPartner(null);
+		partner2.setPartner(null);
+		
 		return true;
+	}
+	
+	private boolean arePartners(PersonIdentity person1, PersonIdentity person2) {
+		if (person1.getPartner() == null || person2.getPartner() == null) {
+			return false;
+		}
+		return person1.getPartner() == person2 && person2.getPartner() == person1;
 	}
 }

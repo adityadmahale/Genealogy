@@ -4,6 +4,10 @@ public class PersonIdentity {
 	private String name;
 	private PersonIdentity partner;
 	
+	public PersonIdentity getPartner() {
+		return partner;
+	}
+
 	public PersonIdentity(int personId, String name) {
 		this.personId = personId;
 		this.name = name;
