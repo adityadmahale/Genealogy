@@ -11,11 +11,13 @@ public class FamilyTreeDatabaseAccess {
 	private static final String TABLE_REFERENCE = "reference";
 	private static final String TABLE_NOTE = "note";
 	private static final String TABLE_PARTNER = "partner";
+	private static final String TABLE_CHILD = "child";
 	
 	// Family tree related column names
 	private static final String COLUMN_NAME = "name";
 	private static final String COLUMN_PERSON_ID = "person_id";
 	private static final String COLUMN_PARTNER_ID = "partner_id";
+	private static final String COLUMN_CHILD_ID = "child_id";
 	private static final String COLUMN_SOURCE = "source";
 	private static final String COLUMN_TEXT = "text";
 	
@@ -64,6 +66,34 @@ public class FamilyTreeDatabaseAccess {
 	    }
 	}
 	
+	// Load parent-child relationships
+	public void loadParentChildRelationships(Set<PersonIdentity> children, Set<PersonIdentity> roots, Map<Integer, PersonIdentity> personIds) throws SQLException {
+		
+		// Get the result set
+	    ResultSet rs = QueryUtility.getAllColumnsAndRows(TABLE_CHILD);
+	    
+	    // Iterate over the result set and store the values in the children set
+	    while(rs.next()) {
+	    	// Get row values
+	    	int parentId = rs.getInt(COLUMN_PERSON_ID);
+	    	int childId = rs.getInt(COLUMN_CHILD_ID);
+	    	
+	    	// Get the PersonIdentity objects for parent and child
+	    	PersonIdentity parentIdentity = personIds.get(parentId);
+	    	PersonIdentity childIdentity = personIds.get(childId);
+	    	
+	    	// Remove child from root and add to children
+	    	roots.remove(childIdentity);
+			children.add(childIdentity);
+			
+			// Add child for the individual and the partner
+			parentIdentity.addChild(childIdentity);
+			if (parentIdentity.hasPartner()) {
+				parentIdentity.getPartner().addChild(childIdentity);
+			}
+	    }
+	}
+	
 	// Inserts a person into the database
 	public int insertPerson(String name) throws SQLException {
 		return QueryUtility.insertIntoOneColumnStringTable(TABLE_PERSON, COLUMN_NAME, name);
@@ -79,12 +109,18 @@ public class FamilyTreeDatabaseAccess {
 		QueryUtility.insertIntoTwoColumnsTable(TABLE_NOTE, COLUMN_TEXT, note, COLUMN_PERSON_ID, personId);
 	}
 	
-	// Inserts a note for a person
+	// Inserts partnering relation
 	public void insertPartneringRelation(int personId1, int personId2) throws SQLException {
 		QueryUtility.insertSymmetricIntValuesIntoTable(TABLE_PARTNER, personId1, personId2);
 	}
 	
+	// Deletes partnering relation
 	public void dissolvePartneringRelation(int personId1, int personId2) throws SQLException {
 		QueryUtility.deleteSymmetricIntValuesFromTable(TABLE_PARTNER, COLUMN_PERSON_ID, personId1, personId2);
+	}
+	
+	// Inserts a parent-child relation
+	public void insertParentChild(int parentId, int childId) throws SQLException {
+		QueryUtility.insertIntoLinkTable(TABLE_CHILD, parentId, childId);
 	}
 }

@@ -1,8 +1,11 @@
+import java.util.ArrayList;
+import java.util.List;
 
 public class PersonIdentity {
 	private int personId;
 	private String name;
 	private PersonIdentity partner;
+	private List<PersonIdentity> children = new ArrayList<>();
 	
 	public PersonIdentity getPartner() {
 		return partner;
@@ -23,5 +26,17 @@ public class PersonIdentity {
 
 	public void setPartner(PersonIdentity partner) {
 		this.partner = partner;
+	}
+	
+	public boolean hasPartner() {
+		return partner != null;
+	}
+
+	public List<PersonIdentity> getChildren() {
+		return children;
+	}
+
+	public void addChild(PersonIdentity child) {
+		children.add(child);
 	}
 }
