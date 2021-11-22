@@ -30,9 +30,11 @@ public class FamilyTreeManagement {
 	
 	public FamilyTreeManagement() {
 		try {
+			// Load state of the tree from the database
 			familyTreeAccess.loadPersons(persons, personIds, roots);
 			familyTreeAccess.loadPartneringRelationships(partnered, personIds);
 			familyTreeAccess.loadParentChildRelationships(children, roots, personIds);
+			familyTreeAccess.updateRootAncestors(roots);
 		} catch (SQLException e) {
 			throw new IllegalStateException();
 		}
@@ -99,7 +101,6 @@ public class FamilyTreeManagement {
 		}
 		
 		try {
-			
 			// Insert note for the given person
 			familyTreeAccess.insertNote(person.getPersonId(), note);
 			
@@ -141,6 +142,9 @@ public class FamilyTreeManagement {
 		// Update relationships in the PersonIdentity objects
 		Utility.updateParentChildRelationship(parent, child);
 		
+		// Update root ancestors
+		child.updateRootAncestors(parent);
+
 		return true;
 	}
 	

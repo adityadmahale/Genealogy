@@ -1,7 +1,6 @@
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -89,6 +88,25 @@ public class FamilyTreeDatabaseAccess {
 			// Update relationships in the PersonIdentity objects
 			Utility.updateParentChildRelationship(parentIdentity, childIdentity);
 	    }
+	}
+	
+	// Update root ancestors set for all individuals
+	public void updateRootAncestors(Set<PersonIdentity> roots) {
+		// Trigger recursion from all roots
+		for (var root: roots) {
+			updateRootAncestors(root, root);
+		}
+	}
+	
+	// Recursively call for every descendant
+	private void updateRootAncestors(PersonIdentity current, PersonIdentity root) {
+		if (current != root) {
+			current.addRootAncestor(root);
+		}
+		
+		for (var child: current.getChildren()) {
+			updateRootAncestors(child, root);
+		}
 	}
 	
 	// Inserts a person into the database
