@@ -4,6 +4,7 @@ import java.util.List;
 public class PersonIdentity {
 	private int personId;
 	private String name;
+	private List<PersonIdentity> parents = new ArrayList<>();
 	private PersonIdentity partner;
 	private List<PersonIdentity> children = new ArrayList<>();
 	
@@ -38,5 +39,13 @@ public class PersonIdentity {
 
 	public void addChild(PersonIdentity child) {
 		children.add(child);
+	}
+
+	public List<PersonIdentity> getParents() {
+		return parents;
+	}
+	
+	public void addParent(PersonIdentity parent) {
+		parents.add(parent);
 	}
 }

@@ -88,8 +88,13 @@ public class FamilyTreeDatabaseAccess {
 			
 			// Add child for the individual and the partner
 			parentIdentity.addChild(childIdentity);
+			childIdentity.addParent(parentIdentity);
+			
+			// If a partner is present, the update the parent-child relationship for the partner
 			if (parentIdentity.hasPartner()) {
-				parentIdentity.getPartner().addChild(childIdentity);
+				PersonIdentity partnerIdentity = parentIdentity.getPartner();
+				partnerIdentity.addChild(childIdentity);
+				childIdentity.addParent(partnerIdentity);
 			}
 	    }
 	}
