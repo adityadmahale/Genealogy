@@ -86,16 +86,8 @@ public class FamilyTreeDatabaseAccess {
 	    	roots.remove(childIdentity);
 			children.add(childIdentity);
 			
-			// Add child for the individual and the partner
-			parentIdentity.addChild(childIdentity);
-			childIdentity.addParent(parentIdentity);
-			
-			// If a partner is present, the update the parent-child relationship for the partner
-			if (parentIdentity.hasPartner()) {
-				PersonIdentity partnerIdentity = parentIdentity.getPartner();
-				partnerIdentity.addChild(childIdentity);
-				childIdentity.addParent(partnerIdentity);
-			}
+			// Update relationships in the PersonIdentity objects
+			Utility.updateParentChildRelationship(parentIdentity, childIdentity);
 	    }
 	}
 	

@@ -111,11 +111,13 @@ public class FamilyTreeManagement {
 	}
 	
 	public Boolean recordChild(PersonIdentity parent, PersonIdentity child) {
-		if (parent == null || child == null) {
+		// Check if the inputs are invalid
+		if (Utility.isInvalid(parent, child)) {
 			throw new IllegalArgumentException();
 		}
 		
-		if (parent == child) {
+		// Check if both the input objects are same
+		if (Utility.isSamePerson(parent, child)) {
 			throw new IllegalArgumentException("Cannot record child for the same person");
 		}
 		
@@ -136,26 +138,20 @@ public class FamilyTreeManagement {
 		roots.remove(child);
 		children.add(child);
 		
-		// Add child for the individual and the partner
-		parent.addChild(child);
-		child.addParent(parent);
-		
-		// If a partner is present, the update the parent-child relationship for the partner
-		if (parent.hasPartner()) {
-			PersonIdentity partner = parent.getPartner();
-			partner.addChild(child);
-			child.addParent(partner);
-		}
+		// Update relationships in the PersonIdentity objects
+		Utility.updateParentChildRelationship(parent, child);
 		
 		return true;
 	}
 	
 	public Boolean recordPartnering(PersonIdentity partner1, PersonIdentity partner2) {
-		if (partner1 == null || partner2 == null) {
+		// Check if the inputs are invalid
+		if (Utility.isInvalid(partner1, partner2)) {
 			throw new IllegalArgumentException();
 		}
 		
-		if (partner1 == partner2) {
+		// Check if both the input objects are same
+		if (Utility.isSamePerson(partner1, partner2)) {
 			throw new IllegalArgumentException("Cannot partner the same person");
 		}
 		
@@ -182,11 +178,13 @@ public class FamilyTreeManagement {
 	}
 	
 	public Boolean recordDissolution(PersonIdentity partner1, PersonIdentity partner2) {
-		if (partner1 == null || partner2 == null) {
+		// Check if the inputs are invalid
+		if (Utility.isInvalid(partner1, partner2)) {
 			throw new IllegalArgumentException();
 		}
 		
-		if (partner1 == partner2) {
+		// Check if both the input objects are same
+		if (Utility.isSamePerson(partner1, partner2)) {
 			throw new IllegalArgumentException("Cannot perform dissolution between the same person");
 		}
 		
@@ -212,7 +210,9 @@ public class FamilyTreeManagement {
 		return true;
 	}
 	
+	// Checks if the persons are partners
 	private boolean arePartners(PersonIdentity person1, PersonIdentity person2) {
+		// Check if the partner is null
 		if (person1.getPartner() == null || person2.getPartner() == null) {
 			return false;
 		}
