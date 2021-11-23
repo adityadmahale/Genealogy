@@ -137,7 +137,8 @@ public class PersistentState {
 			children.add(childIdentity);
 			
 			// Update relationships in the PersonIdentity objects
-			Utility.updateParentChildRelationship(parentIdentity, childIdentity);
+			parentIdentity.addChild(childIdentity);
+			childIdentity.addParent(parentIdentity);
 	    }
 	}
 	
