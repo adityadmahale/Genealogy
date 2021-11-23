@@ -131,6 +131,9 @@ public class FamilyTreeManagement {
 			
 			// Insert parent child relation in the database
 			familyTreeAccess.insertParentChild(parent.getPersonId(), child.getPersonId());
+			if (parent.hasPartner()) {
+				familyTreeAccess.insertParentChild(parent.getPartner().getPersonId(), child.getPersonId());
+			}
 			
 		} catch (SQLException e) {
 			throw new IllegalStateException(e.getMessage());
