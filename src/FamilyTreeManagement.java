@@ -14,27 +14,28 @@ public class FamilyTreeManagement {
 	private static final int MAX_NOTE_LENGTH = 500;
 	
 	// Map for storing name and its corresponding PersonIdentity
-	private Map<String, PersonIdentity> persons = new HashMap<>();
+	private Map<String, PersonIdentity> persons;
 	// Map for storing id and its corresponding PersonIdentity
-	private Map<Integer, PersonIdentity> personIds = new HashMap<>();
+	private Map<Integer, PersonIdentity> personIds;
 	
 	// Set for storing roots of the family tree
-	private Set<PersonIdentity> roots = new HashSet<>();
+	private Set<PersonIdentity> roots;
 	// Set for storing partners
-	private Set<PersonIdentity> partnered = new HashSet<>();
+	private Set<PersonIdentity> partnered;
 	// Set for storing children
-	private Set<PersonIdentity> children = new HashSet<>();
+	private Set<PersonIdentity> children;
 	
 	// Object for accessing family tree related database tables
 	private FamilyTreeDatabaseAccess familyTreeAccess = new FamilyTreeDatabaseAccess();
 	
 	public FamilyTreeManagement() {
 		try {
-			// Load state of the tree from the database
-			familyTreeAccess.loadPersons(persons, personIds, roots);
-			familyTreeAccess.loadPartneringRelationships(partnered, personIds);
-			familyTreeAccess.loadParentChildRelationships(children, roots, personIds);
-			familyTreeAccess.updateRootAncestors(roots);
+			PersistentState.initializeFamilyTreeState();
+			persons = PersistentState.getPersons();
+			personIds = PersistentState.getPersonIds();
+			roots = PersistentState.getRoots();
+			partnered = PersistentState.getPartners();
+			children = PersistentState.getChildren();
 		} catch (SQLException e) {
 			throw new IllegalStateException();
 		}
