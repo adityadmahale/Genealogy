@@ -22,8 +22,9 @@ public class MediaManagement {
 	public MediaManagement() {
 		// Retrieve all the tags in the database and store it in the tags map
 		try {
-			files = mediaAccess.getFiles();
-			tags = mediaAccess.getTags();
+			PersistentState.initializeMediaState();
+			files = PersistentState.getFiles();
+			tags = PersistentState.getTags();
 		} catch (SQLException e) {
 			throw new IllegalStateException();
 		}

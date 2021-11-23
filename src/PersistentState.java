@@ -18,6 +18,15 @@ public class PersistentState {
 	private static final String COLUMN_PARTNER_ID = "partner_id";
 	private static final String COLUMN_CHILD_ID = "child_id";
 	
+	// Media related table names
+	private static final String TABLE_MEDIA = "media";
+	private static final String TABLE_TAG = "tag";
+	
+	// Media related column names
+	private static final String COLUMN_FILE_LOCTION = "file_location";
+	private static final String COLUMN_TAG_ID = "tag_id";
+	private static final String COLUMN_MEDIA_ID = "media_id";
+	
 	// Map for storing name and its corresponding PersonIdentity
 	private static Map<String, PersonIdentity> persons;
 	// Map for storing id and its corresponding PersonIdentity
@@ -29,6 +38,12 @@ public class PersistentState {
 	private static Set<PersonIdentity> partnered;
 	// Set for storing children
 	private static Set<PersonIdentity> children;
+	
+	// Map for storing tag and its corresponding tag id
+	private static Map<String, Integer> tags;
+	
+	// Map for storing file location and its corresponding FileIdentifier
+	private static Map<String, FileIdentifier> files;
 	
 	public static void initializeFamilyTreeState() throws SQLException {
 		loadPersons();
@@ -143,5 +158,48 @@ public class PersistentState {
 		for (var child: current.getChildren()) {
 			updateRootAncestors(child, root);
 		}
+	}
+	
+	public static void initializeMediaState() throws SQLException {
+		loadTags();
+		loadFiles();
+	}
+	
+	public static Map<String, Integer> getTags() {
+		return tags;
+	}
+	
+	public static Map<String, FileIdentifier> getFiles() {
+		return files;
+	}
+	
+	// Returns all the tags present in the database
+	private static void loadTags() throws SQLException {
+		
+		// Get the result set
+	    ResultSet rs = QueryUtility.getAllColumnsAndRows(TABLE_TAG);
+	    
+	    // Iterate over the result set and store the values in the map
+	    // with tag name as the key and tag id as the value
+	    tags = new HashMap<>();
+	    while(rs.next()) {
+	    	tags.put(rs.getString(COLUMN_NAME), rs.getInt(COLUMN_TAG_ID));
+	    }
+	}
+	
+	// Returns all the files present in the database
+	private static void loadFiles() throws SQLException {
+		
+		// Get the result set
+	    ResultSet rs = QueryUtility.getAllColumnsAndRows(TABLE_MEDIA);
+	    
+	    // Iterate over the result set and store the values in the map
+	    // with the file location as the key and file identifier as the value
+	    files = new HashMap<>();
+	    while(rs.next()) {
+	    	String file_location = rs.getString(COLUMN_FILE_LOCTION);
+	    	int media_id = rs.getInt(COLUMN_MEDIA_ID);
+	    	files.put(file_location, new FileIdentifier(media_id, file_location));
+	    }
 	}
 }

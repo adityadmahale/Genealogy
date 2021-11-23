@@ -17,7 +17,6 @@ public class MediaDatabaseAccess {
 	// Media related column names
 	private static final String COLUMN_FILE_LOCTION = "file_location";
 	private static final String COLUMN_NAME = "name";
-	private static final String COLUMN_TAG_ID = "tag_id";
 	private static final String COLUMN_MEDIA_ID = "media_id";
 	private static final String COLUMN_PERSON_ID = "person_id";
 	
@@ -28,40 +27,6 @@ public class MediaDatabaseAccess {
 	// Inserts a media into the database
 	public int insertMedia(String fileLocation) throws SQLException {
 		return QueryUtility.insertIntoOneColumnStringTable(TABLE_MEDIA, COLUMN_FILE_LOCTION, fileLocation);
-	}
-	
-	// Returns all the tags present in the database
-	public Map<String, Integer> getTags() throws SQLException {
-		
-		// Get the result set
-	    ResultSet rs = QueryUtility.getAllColumnsAndRows(TABLE_TAG);
-	    
-	    // Iterate over the result set and store the values in the map
-	    // with tag name as the key and tag id as the value
-	    Map<String, Integer> tags = new HashMap<>();
-	    while(rs.next()) {
-	    	tags.put(rs.getString(COLUMN_NAME), rs.getInt(COLUMN_TAG_ID));
-	    }
-	    
-	    return tags;
-	}
-	
-	// Returns all the files present in the database
-	public Map<String, FileIdentifier> getFiles() throws SQLException {
-		
-		// Get the result set
-	    ResultSet rs = QueryUtility.getAllColumnsAndRows(TABLE_MEDIA);
-	    
-	    // Iterate over the result set and store the values in the map
-	    // with the file location as the key and file identifier as the value
-	    Map<String, FileIdentifier> files = new HashMap<>();
-	    while(rs.next()) {
-	    	String file_location = rs.getString(COLUMN_FILE_LOCTION);
-	    	int media_id = rs.getInt(COLUMN_MEDIA_ID);
-	    	files.put(file_location, new FileIdentifier(media_id, file_location));
-	    }
-	    
-	    return files;
 	}
 	
 	// Inserts a tag into the database
