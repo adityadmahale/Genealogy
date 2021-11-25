@@ -32,6 +32,10 @@ public class PersonIdentity {
 		return personId;
 	}
 	
+	public boolean hasChildren() {
+		return children.size() > 0;
+	}
+	
 	// Returns name of the person
 	public String getName() {
 		return name;
@@ -75,6 +79,14 @@ public class PersonIdentity {
 	// Add a root ancestor for the person
 	public void addRootAncestor(PersonIdentity person) {
 		rootAncestors.add(person);
+	}
+	
+	public Set<PersonIdentity> getRootAncestors() {
+		return rootAncestors;
+	}
+	
+	public boolean isRootAncestorPresent(PersonIdentity person) {
+		return rootAncestors.contains(person);
 	}
 	
 	// Updates rootAncestors for the child and descendants recursively
