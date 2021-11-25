@@ -3,16 +3,16 @@ public class FileIdentifier {
 	private int fileId;
 	private String fileLocation;
 	
-	public FileIdentifier(int fileId, String fileLocation) {
+	FileIdentifier(int fileId, String fileLocation) {
 		this.fileId = fileId;
 		this.fileLocation = fileLocation;
 	}
 
-	public int getFileId() {
+	int getFileId() {
 		return fileId;
 	}
 
-	public String getFileLocation() {
+	String getFileLocation() {
 		return fileLocation;
 	}
 }

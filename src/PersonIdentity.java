@@ -18,7 +18,7 @@ public class PersonIdentity {
 	private Set<PersonIdentity> rootAncestors = new HashSet<>();
 	
 	// Returns partner of the person
-	public PersonIdentity getPartner() {
+	PersonIdentity getPartner() {
 		return partner;
 	}
 	
@@ -28,69 +28,69 @@ public class PersonIdentity {
 	}
 	
 	// Returns Id associated with the person
-	public int getPersonId() {
+	int getPersonId() {
 		return personId;
 	}
 	
-	public boolean hasChildren() {
+	boolean hasChildren() {
 		return children.size() > 0;
 	}
 	
 	// Returns name of the person
-	public String getName() {
+	String getName() {
 		return name;
 	}
 	
 	// Sets partner for the person
-	public void setPartner(PersonIdentity partner) {
+	void setPartner(PersonIdentity partner) {
 		this.partner = partner;
 	}
 	
 	// Checks if the partner exists for the person
-	public boolean hasPartner() {
+	boolean hasPartner() {
 		return partner != null;
 	}
 	
 	// Returns list of children of the person
-	public List<PersonIdentity> getChildren() {
+	List<PersonIdentity> getChildren() {
 		return children;
 	}
 	
 	// Adds a child to the person
-	public void addChild(PersonIdentity child) {
+	void addChild(PersonIdentity child) {
 		children.add(child);
 	}
 	
 	// Returns parents of the person
-	public List<PersonIdentity> getParents() {
+	List<PersonIdentity> getParents() {
 		return parents;
 	}
 	
 	// Adds a parent to the person
-	public void addParent(PersonIdentity parent) {
+	void addParent(PersonIdentity parent) {
 		parents.add(parent);
 	}
 	
 	// Checks if the root ancestor is present for the person
-	public boolean isRootAncestorPresent() {
+	boolean isRootAncestorPresent() {
 		return rootAncestors.size() > 0;
 	}
 	
 	// Add a root ancestor for the person
-	public void addRootAncestor(PersonIdentity person) {
+	void addRootAncestor(PersonIdentity person) {
 		rootAncestors.add(person);
 	}
 	
-	public Set<PersonIdentity> getRootAncestors() {
+	Set<PersonIdentity> getRootAncestors() {
 		return rootAncestors;
 	}
 	
-	public boolean isRootAncestorPresent(PersonIdentity person) {
+	boolean isRootAncestorPresent(PersonIdentity person) {
 		return rootAncestors.contains(person);
 	}
 	
 	// Updates rootAncestors for the child and descendants recursively
-	public void updateRootAncestors(PersonIdentity parent) {
+	void updateRootAncestors(PersonIdentity parent) {
 		// Holds new root ancestors for the child
 		Set<PersonIdentity> childRootAncestors = new HashSet<>();
 		

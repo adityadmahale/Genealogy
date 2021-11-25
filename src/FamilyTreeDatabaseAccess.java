@@ -1,10 +1,7 @@
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
-import java.util.Set;
 
-public class FamilyTreeDatabaseAccess {
+
+class FamilyTreeDatabaseAccess {
 	// Family tree related table names
 	private static final String TABLE_PERSON = "person";
 	private static final String TABLE_REFERENCE = "reference";

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class PersistentState {
+class PersistentState {
 	
 	// Family tree related table names
 	private static final String TABLE_PERSON = "person";
@@ -45,30 +45,30 @@ public class PersistentState {
 	// Map for storing file location and its corresponding FileIdentifier
 	private static Map<String, FileIdentifier> files;
 	
-	public static void initializeFamilyTreeState() throws SQLException {
+	static void initializeFamilyTreeState() throws SQLException {
 		loadPersons();
 		loadPartneringRelationships();
 		loadParentChildRelationships();
 		updateRootAncestors();
 	}
 	
-	public static Map<String, PersonIdentity> getPersons() throws SQLException {
+	static Map<String, PersonIdentity> getPersons() throws SQLException {
 		return persons;
 	}
 	
-	public static Map<Integer, PersonIdentity> getPersonIds() throws SQLException {
+	static Map<Integer, PersonIdentity> getPersonIds() throws SQLException {
 		return personIds;
 	}
 	
-	public static Set<PersonIdentity> getRoots() throws SQLException {
+	static Set<PersonIdentity> getRoots() throws SQLException {
 		return roots;
 	}
 	
-	public static Set<PersonIdentity> getPartners() throws SQLException {
+	static Set<PersonIdentity> getPartners() throws SQLException {
 		return partnered;
 	}
 	
-	public static Set<PersonIdentity> getChildren() throws SQLException {
+	static Set<PersonIdentity> getChildren() throws SQLException {
 		return children;
 	}
 	
@@ -161,16 +161,16 @@ public class PersistentState {
 		}
 	}
 	
-	public static void initializeMediaState() throws SQLException {
+	static void initializeMediaState() throws SQLException {
 		loadTags();
 		loadFiles();
 	}
 	
-	public static Map<String, Integer> getTags() {
+	static Map<String, Integer> getTags() {
 		return tags;
 	}
 	
-	public static Map<String, FileIdentifier> getFiles() {
+	static Map<String, FileIdentifier> getFiles() {
 		return files;
 	}
 	

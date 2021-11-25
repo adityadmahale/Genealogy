@@ -1,6 +1,6 @@
 
-public class Utility {
-	public static void updateParentChildRelationship(PersonIdentity parent, PersonIdentity child) {
+class Utility {
+	static void updateParentChildRelationship(PersonIdentity parent, PersonIdentity child) {
 		// Add child for the individual and the partner
 		parent.addChild(child);
 		child.addParent(parent);
@@ -14,12 +14,12 @@ public class Utility {
 	}
 	
 	// Checks if its the same person
-	public static boolean isSamePerson(PersonIdentity person1, PersonIdentity person2) {
+	static boolean isSamePerson(PersonIdentity person1, PersonIdentity person2) {
 		return person1 == person2;
 	}
 	
 	// Checks if the inputs are invalid
-	public static boolean isInvalid(PersonIdentity person1, PersonIdentity person2) {
+	static boolean isInvalid(PersonIdentity person1, PersonIdentity person2) {
 		return person1 == null || person2 == null;
 	}
 }

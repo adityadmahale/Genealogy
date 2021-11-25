@@ -1,14 +1,12 @@
 import java.sql.SQLException;
-import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Set;
 
-public class Reporting {
+class Reporting {
 	// Map for storing name and its corresponding PersonIdentity
 	private Map<String, PersonIdentity> persons;
 	// Map for storing id and its corresponding PersonIdentity
@@ -41,7 +39,7 @@ public class Reporting {
 	}
 	
 	// Returns the PersonIdentity object for the given name
-	public PersonIdentity findPerson(String name) {
+	PersonIdentity findPerson(String name) {
 		// Handle invalid input
 		if (name == null) {
 			throw new IllegalArgumentException();
@@ -54,7 +52,7 @@ public class Reporting {
 	}
 	
 	// Returns the FileIdentifier object for the given file location
-	public FileIdentifier findMediaFile(String name) {
+	FileIdentifier findMediaFile(String name) {
 		// Handle invalid input
 		if (name == null) {
 			throw new IllegalArgumentException();
@@ -67,7 +65,7 @@ public class Reporting {
 	}
 	
 	// Returns the name of the person for the given PersonIdentity object
-	public String findName(PersonIdentity id) {
+	String findName(PersonIdentity id) {
 		if (id == null) {
 			throw new IllegalArgumentException();
 		}
@@ -75,14 +73,14 @@ public class Reporting {
 	}
 	
 	// Returns the file location for the given FileIdentifier object
-	public String findMediaFile(FileIdentifier fileId) {
+	String findMediaFile(FileIdentifier fileId) {
 		if (fileId == null) {
 			throw new IllegalArgumentException();
 		}
 		return fileId.getFileLocation();
 	}
 	
-	public BiologicalRelation findRelation(PersonIdentity person1,PersonIdentity person2) {
+	BiologicalRelation findRelation(PersonIdentity person1,PersonIdentity person2) {
 		// Handle invalid inputs
 		if (Utility.isInvalid(person1, person2)) {
 			throw new IllegalArgumentException();
@@ -199,7 +197,7 @@ public class Reporting {
 	}
 	
 	// Find the descendants of the given person
-	public Set<PersonIdentity> descendents(PersonIdentity person, Integer generations) {
+	Set<PersonIdentity> descendents(PersonIdentity person, Integer generations) {
 		// Handle invalid inputs
 		if (person == null || generations < 0) {
 			throw new IllegalArgumentException();
@@ -228,7 +226,7 @@ public class Reporting {
 	}
 	
 	// Find the ancestors of the given person
-	public Set<PersonIdentity> ancestors(PersonIdentity person, Integer generations) {
+	Set<PersonIdentity> ancestors(PersonIdentity person, Integer generations) {
 		// Handle invalid inputs
 		if (person == null || generations < 0) {
 			throw new IllegalArgumentException();
@@ -256,23 +254,23 @@ public class Reporting {
 		}
 	}
 	
-	public List<String> notesAndReferences(PersonIdentity person) {
+	List<String> notesAndReferences(PersonIdentity person) {
 		return null;
 	}
 	
-	public Set<FileIdentifier> findMediaByTag(String tag , String startDate, String endDate) {
+	Set<FileIdentifier> findMediaByTag(String tag , String startDate, String endDate) {
 		return null;
 	}
 	
-	public Set<FileIdentifier> findMediaByLocation(String location, String startDate, String endDate) {
+	Set<FileIdentifier> findMediaByLocation(String location, String startDate, String endDate) {
 		return null;
 	}
 	
-	public List<FileIdentifier> findIndividualsMedia(Set<PersonIdentity> people, String startDate, String endDate) {
+	List<FileIdentifier> findIndividualsMedia(Set<PersonIdentity> people, String startDate, String endDate) {
 		return null;
 	}
 	
-	public List<FileIdentifier> findBiologicalFamilyMedia(PersonIdentity person) {
+	List<FileIdentifier> findBiologicalFamilyMedia(PersonIdentity person) {
 		return null;
 	}
 	

@@ -3,12 +3,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 // Singleton class for getting database connection
-public class DatabaseConnection {
+class DatabaseConnection {
 	
 	// Connection object shared across all the code
 	private static Connection connection;
 	
-	public static Connection getConnection() {
+	static Connection getConnection() {
 		try {
 			// Returns the connection object if it's not null
 			if (connection != null) {
@@ -20,7 +20,7 @@ public class DatabaseConnection {
 			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/genealogy", "root", "pulsar25");
 			
 		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
+			throw new IllegalStateException(e.getMessage());
 		}
 		return connection;
 	}

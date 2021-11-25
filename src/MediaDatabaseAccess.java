@@ -1,13 +1,10 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
-public class MediaDatabaseAccess {
+class MediaDatabaseAccess {
 	// Media related table names
 	private static final String TABLE_MEDIA = "media";
 	private static final String TABLE_TAG = "tag";
@@ -25,7 +22,7 @@ public class MediaDatabaseAccess {
 	private static Connection connection = DatabaseConnection.getConnection();
 	
 	// Inserts a media into the database
-	public int insertMedia(String fileLocation) throws SQLException {
+	int insertMedia(String fileLocation) throws SQLException {
 		return QueryUtility.insertIntoOneColumnStringTable(TABLE_MEDIA, COLUMN_FILE_LOCTION, fileLocation);
 	}
 	
@@ -35,7 +32,7 @@ public class MediaDatabaseAccess {
 	}
 	
 	// Links tag and media
-	public void linkTagAndMedia(int tagId, int mediaId, String tagName) throws SQLException {
+	void linkTagAndMedia(int tagId, int mediaId, String tagName) throws SQLException {
 		// Set auto commit to false as insertion in both the tables(tag and media_tag)
 		// should complete successfully
 		connection.setAutoCommit(false);
@@ -61,7 +58,7 @@ public class MediaDatabaseAccess {
 	}
 	
 	// Links people and media
-	public void linkPeopleAndMedia(FileIdentifier fileIdentifier, List<PersonIdentity> people) throws SQLException {
+	void linkPeopleAndMedia(FileIdentifier fileIdentifier, List<PersonIdentity> people) throws SQLException {
 		// Get mediaId
 		int mediaId = fileIdentifier.getFileId();
 		

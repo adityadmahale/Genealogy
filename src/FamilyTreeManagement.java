@@ -1,10 +1,8 @@
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class FamilyTreeManagement {
+class FamilyTreeManagement {
 	
 	// Maximum string length of the tag name
 	private static final int MAX_PERSON_NAME_LENGTH = 255;
@@ -41,7 +39,7 @@ public class FamilyTreeManagement {
 		}
 	}
 	
-	public PersonIdentity addPerson(String name) {
+	PersonIdentity addPerson(String name) {
 		// Handle illegal arguments
 		if (name == null || name.equals("") || name.length() > MAX_PERSON_NAME_LENGTH) {
 			throw new IllegalArgumentException();
@@ -73,11 +71,11 @@ public class FamilyTreeManagement {
 		return personIdentity;
 	}
 	
-	public Boolean recordAttributes(PersonIdentity person, Map<String, String> attributes) {
+	Boolean recordAttributes(PersonIdentity person, Map<String, String> attributes) {
 		return true;
 	}
 	
-	public Boolean recordReference(PersonIdentity person, String reference) {
+	Boolean recordReference(PersonIdentity person, String reference) {
 		// Handle invalid inputs
 		if (person == null || reference == null || reference == "" || reference.length() > MAX_REFERENCE_LENGTH) {
 			throw new IllegalArgumentException();
@@ -95,7 +93,7 @@ public class FamilyTreeManagement {
 		return true;
 	}
 	
-	public Boolean recordNote(PersonIdentity person, String note) {
+	Boolean recordNote(PersonIdentity person, String note) {
 		// Handle invalid inputs
 		if (person == null || note == null || note == "" || note.length() > MAX_NOTE_LENGTH) {
 			throw new IllegalArgumentException();
@@ -112,7 +110,7 @@ public class FamilyTreeManagement {
 		return true;
 	}
 	
-	public Boolean recordChild(PersonIdentity parent, PersonIdentity child) {
+	Boolean recordChild(PersonIdentity parent, PersonIdentity child) {
 		// Check if the inputs are invalid
 		if (Utility.isInvalid(parent, child)) {
 			throw new IllegalArgumentException();
@@ -152,7 +150,7 @@ public class FamilyTreeManagement {
 		return true;
 	}
 	
-	public Boolean recordPartnering(PersonIdentity partner1, PersonIdentity partner2) {
+	Boolean recordPartnering(PersonIdentity partner1, PersonIdentity partner2) {
 		// Check if the inputs are invalid
 		if (Utility.isInvalid(partner1, partner2)) {
 			throw new IllegalArgumentException();
@@ -185,7 +183,7 @@ public class FamilyTreeManagement {
 		return true;
 	}
 	
-	public Boolean recordDissolution(PersonIdentity partner1, PersonIdentity partner2) {
+	Boolean recordDissolution(PersonIdentity partner1, PersonIdentity partner2) {
 		// Check if the inputs are invalid
 		if (Utility.isInvalid(partner1, partner2)) {
 			throw new IllegalArgumentException();

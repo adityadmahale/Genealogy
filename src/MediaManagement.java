@@ -2,7 +2,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-public class MediaManagement {
+class MediaManagement {
 	
 	// Maximum string length of the tag name
 	private static final int MAX_TAG_NAME_LENGTH = 255;
