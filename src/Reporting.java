@@ -83,7 +83,6 @@ public class Reporting {
 	}
 	
 	public BiologicalRelation findRelation(PersonIdentity person1,PersonIdentity person2) {
-		final int NO_PATH_SIZE = 0;
 		// Handle invalid inputs
 		if (Utility.isInvalid(person1, person2)) {
 			throw new IllegalArgumentException();
