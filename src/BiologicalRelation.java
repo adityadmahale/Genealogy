@@ -8,11 +8,11 @@ public class BiologicalRelation {
 		this.levelOfRemoval = levelOfRemoval;
 	}
 
-	public int getDegreeOfCounsinship() {
+	public int getCounsinship() {
 		return degreeOfCounsinship;
 	}
 
-	public int getLevelOfRemoval() {
+	public int getRemoval() {
 		return levelOfRemoval;
 	}
 }
