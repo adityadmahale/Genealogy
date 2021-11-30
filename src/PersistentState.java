@@ -21,11 +21,13 @@ class PersistentState {
 	// Media related table names
 	private static final String TABLE_MEDIA = "media";
 	private static final String TABLE_TAG = "tag";
+	private static final String TABLE_CITY = "city";
 	
 	// Media related column names
 	private static final String COLUMN_FILE_LOCTION = "file_location";
 	private static final String COLUMN_TAG_ID = "tag_id";
 	private static final String COLUMN_MEDIA_ID = "media_id";
+	private static final String COLUMN_CITY_ID = "city_id";
 	
 	// Map for storing name and its corresponding PersonIdentity
 	private static Map<String, PersonIdentity> persons;
@@ -41,6 +43,9 @@ class PersistentState {
 	
 	// Map for storing tag and its corresponding tag id
 	private static Map<String, Integer> tags;
+	
+	// Map for storing city and its corresponding city id
+	private static Map<String, Integer> cities;
 	
 	// Map for storing file location and its corresponding FileIdentifier
 	private static Map<String, FileIdentifier> files;
@@ -164,6 +169,7 @@ class PersistentState {
 	static void initializeMediaState() throws SQLException {
 		loadTags();
 		loadFiles();
+		loadCities();
 	}
 	
 	static Map<String, Integer> getTags() {
@@ -172,6 +178,24 @@ class PersistentState {
 	
 	static Map<String, FileIdentifier> getFiles() {
 		return files;
+	}
+	
+	static Map<String, Integer> getCities() {
+		return cities;
+	}
+	
+	// Returns all the tags present in the database
+	private static void loadCities() throws SQLException {
+		
+		// Get the result set
+	    ResultSet rs = QueryUtility.getAllColumnsAndRows(TABLE_CITY);
+	    
+	    // Iterate over the result set and store the values in the map
+	    // with city name as the key and city id as the value
+	    cities = new HashMap<>();
+	    while(rs.next()) {
+	    	cities.put(rs.getString(COLUMN_NAME), rs.getInt(COLUMN_CITY_ID));
+	    }
 	}
 	
 	// Returns all the tags present in the database

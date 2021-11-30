@@ -3,6 +3,10 @@ import java.util.List;
 import java.util.Map;
 
 class MediaManagement {
+	// Attribute keys
+	private static final String CITY_KEY = "city";
+	private static final String DATE_KEY = "date";
+	private static final String YEAR_KEY = "year";
 	
 	// Maximum string length of the tag name
 	private static final int MAX_TAG_NAME_LENGTH = 255;
@@ -12,6 +16,9 @@ class MediaManagement {
 	
 	// Map for storing tag and its corresponding tag id
 	private Map<String, Integer> tags;
+	
+	// Map for storing city and its corresponding id
+	private Map<String, Integer> cities;
 	
 	// Map for storing file location and its corresponding FileIdentifier
 	private Map<String, FileIdentifier> files;
@@ -25,6 +32,7 @@ class MediaManagement {
 			PersistentState.initializeMediaState();
 			files = PersistentState.getFiles();
 			tags = PersistentState.getTags();
+			cities = PersistentState.getCities();
 		} catch (SQLException e) {
 			throw new IllegalStateException();
 		}
@@ -62,7 +70,51 @@ class MediaManagement {
 	}
 	
 	Boolean recordMediaAttributes(FileIdentifier fileIdentifier, Map<String, String> attributes) {
-		return false;
+		// Handle invalid input for the fileIdentifier
+		if (fileIdentifier == null || attributes == null) {
+			throw new IllegalArgumentException();
+		}
+		
+		// Check for the mandatory parameter
+		if (!attributes.containsKey(CITY_KEY)) {
+			throw new IllegalArgumentException("The city key is mandatory");
+		}
+		
+		// Check if the city value is empty
+		String city = attributes.get(CITY_KEY);
+		if (city == null || city == "") {
+			throw new IllegalArgumentException("The city value cannot be null or empty");
+		}
+		
+		// Check the date format
+		String date = null;
+		if (attributes.containsKey(DATE_KEY)) {
+			date = attributes.get(DATE_KEY);
+			if (date == null || date == "" || !Utility.isDateValid(date)) {
+				throw new IllegalArgumentException("Date format is incorrect");
+			}
+		}
+		
+		// Check the year format
+		String year = null;
+		if (attributes.containsKey(YEAR_KEY)) {
+			year = attributes.get(YEAR_KEY);
+			if (year == null || year == "" || !Utility.isYearValid(year)) {
+				throw new IllegalArgumentException("Year format is incorrect");
+			}
+		}
+		
+		// Get the city ID
+		int cityId = getCityId(city);
+		
+		try {
+			// Add media attribute
+			mediaAccess.addMediaAttributes(fileIdentifier.getFileId(), cityId, city, date, year);
+		} catch (SQLException e) {
+			throw new IllegalStateException(e.getMessage());
+		}
+		
+		return true;
 	}
 	
 	Boolean peopleInMedia(FileIdentifier fileIdentifier, List<PersonIdentity> people) {
@@ -118,5 +170,16 @@ class MediaManagement {
 			tagId = tags.get(tag);
 		}
 		return tagId;
+	}
+	
+	// Get the city id corresponding to a city name
+	private int getCityId(String city) {
+		int cityId = 0;
+		
+		// If the city is already present then get that tagId
+		if (cities.containsKey(city)) {
+			cityId = cities.get(city);
+		}
+		return cityId;
 	}
 }
