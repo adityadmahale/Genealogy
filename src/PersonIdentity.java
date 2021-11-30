@@ -22,6 +22,10 @@ public class PersonIdentity {
 		return partner;
 	}
 	
+	boolean hasParent(PersonIdentity parent) {
+		return parents.contains(parent);
+	}
+	
 	public PersonIdentity(int personId, String name) {
 		this.personId = personId;
 		this.name = name;
@@ -81,6 +85,10 @@ public class PersonIdentity {
 		rootAncestors.add(person);
 	}
 	
+	boolean isParentAdditionAllowed() {
+		return parents.size() < 2;
+	}
+	
 	Set<PersonIdentity> getRootAncestors() {
 		return rootAncestors;
 	}
@@ -93,6 +101,7 @@ public class PersonIdentity {
 	void updateRootAncestors(PersonIdentity parent) {
 		// Holds new root ancestors for the child
 		Set<PersonIdentity> childRootAncestors = new HashSet<>();
+		childRootAncestors.addAll(rootAncestors);
 		
 		// If the parent does not have root ancestors, then add parent as the root ancestor
 		// Otherwise, add root ancestors of the parent 
@@ -100,17 +109,6 @@ public class PersonIdentity {
 			childRootAncestors.add(parent);
 		} else {
 			childRootAncestors.addAll(parent.rootAncestors);
-		}
-		
-		// If the partner does not have root ancestors, then add partner as the root ancestor
-		// Otherwise, add root ancestors of the partner
-		if (parent.hasPartner()) {
-			PersonIdentity partner = parent.getPartner();
-			if (!partner.isRootAncestorPresent()) {
-				childRootAncestors.add(partner);
-			} else {
-				childRootAncestors.addAll(partner.rootAncestors);
-			}
 		}
 		
 		// Start recursion

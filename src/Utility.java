@@ -7,13 +7,6 @@ class Utility {
 		// Add child for the individual and the partner
 		parent.addChild(child);
 		child.addParent(parent);
-		
-		// If a partner is present, the update the parent-child relationship for the partner
-		if (parent.hasPartner()) {
-			PersonIdentity partner = parent.getPartner();
-			partner.addChild(child);
-			child.addParent(partner);
-		}
 	}
 	
 	// Checks if its the same person

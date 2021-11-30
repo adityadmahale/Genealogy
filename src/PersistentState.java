@@ -38,8 +38,6 @@ class PersistentState {
 	private static Set<PersonIdentity> roots;
 	// Set for storing partners
 	private static Set<PersonIdentity> partnered;
-	// Set for storing children
-	private static Set<PersonIdentity> children;
 	
 	// Map for storing tag and its corresponding tag id
 	private static Map<String, Integer> tags;
@@ -71,10 +69,6 @@ class PersistentState {
 	
 	static Set<PersonIdentity> getPartners() throws SQLException {
 		return partnered;
-	}
-	
-	static Set<PersonIdentity> getChildren() throws SQLException {
-		return children;
 	}
 	
 	// Returns all the persons present in the database
@@ -123,7 +117,6 @@ class PersistentState {
 	
 	// Load parent-child relationships
 	private static void loadParentChildRelationships() throws SQLException {
-		children = new HashSet<>();
 		// Get the result set
 	    ResultSet rs = QueryUtility.getAllColumnsAndRows(TABLE_CHILD);
 	    
@@ -139,7 +132,6 @@ class PersistentState {
 	    	
 	    	// Remove child from root and add to children
 	    	roots.remove(childIdentity);
-			children.add(childIdentity);
 			
 			// Update relationships in the PersonIdentity objects
 			parentIdentity.addChild(childIdentity);

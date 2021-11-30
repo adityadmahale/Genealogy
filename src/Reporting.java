@@ -16,8 +16,6 @@ class Reporting {
 	private Set<PersonIdentity> roots;
 	// Set for storing partners
 	private Set<PersonIdentity> partnered;
-	// Set for storing children
-	private Set<PersonIdentity> children;
 	
 	// Map for storing tag and its corresponding tag id
 	private Map<String, Integer> tags;
@@ -34,7 +32,6 @@ class Reporting {
 			personIds = PersistentState.getPersonIds();
 			roots = PersistentState.getRoots();
 			partnered = PersistentState.getPartners();
-			children = PersistentState.getChildren();
 			files = PersistentState.getFiles();
 			tags = PersistentState.getTags();
 		} catch (SQLException e) {
@@ -98,7 +95,7 @@ class Reporting {
 		// Find a common root ancestor between two persons
 		PersonIdentity rootAncestor = getRootAncestor(person1, person2);
 		if (rootAncestor == null) {
-			System.out.println("Not related");
+			return null;
 		}
 		
 		// Create two queues for storing paths from the person to the root ancestor

@@ -20,8 +20,6 @@ class FamilyTreeManagement {
 	private Set<PersonIdentity> roots;
 	// Set for storing partners
 	private Set<PersonIdentity> partnered;
-	// Set for storing children
-	private Set<PersonIdentity> children;
 	
 	// Object for accessing family tree related database tables
 	private FamilyTreeDatabaseAccess familyTreeAccess = new FamilyTreeDatabaseAccess();
@@ -33,7 +31,6 @@ class FamilyTreeManagement {
 			personIds = PersistentState.getPersonIds();
 			roots = PersistentState.getRoots();
 			partnered = PersistentState.getPartners();
-			children = PersistentState.getChildren();
 		} catch (SQLException e) {
 			throw new IllegalStateException();
 		}
@@ -121,17 +118,18 @@ class FamilyTreeManagement {
 			throw new IllegalArgumentException("Cannot record child for the same person");
 		}
 		
-		if (children.contains(child) && !roots.contains(child)) {
-			throw new IllegalArgumentException("Cannot record the child twice");
+		if (child.hasParent(parent)) {
+			throw new IllegalArgumentException("The given parent is already linked to the child");
+		}
+		
+		if (!child.isParentAdditionAllowed()) {
+			throw new IllegalArgumentException("A child cannot have more than two parents");
 		}
 		
 		try {
 			
 			// Insert parent child relation in the database
 			familyTreeAccess.insertParentChild(parent.getPersonId(), child.getPersonId());
-			if (parent.hasPartner()) {
-				familyTreeAccess.insertParentChild(parent.getPartner().getPersonId(), child.getPersonId());
-			}
 			
 		} catch (SQLException e) {
 			throw new IllegalStateException(e.getMessage());
@@ -139,7 +137,6 @@ class FamilyTreeManagement {
 		
 		// Remove child from root and add to children
 		roots.remove(child);
-		children.add(child);
 		
 		// Update relationships in the PersonIdentity objects
 		Utility.updateParentChildRelationship(parent, child);
