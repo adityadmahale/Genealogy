@@ -1,4 +1,5 @@
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -22,6 +23,9 @@ class Reporting {
 	private Map<String, Integer> tags;
 	// Map for storing file location and its corresponding FileIdentifier
 	private Map<String, FileIdentifier> files;
+	
+	// Object for accessing reporting related database tables
+	private ReportingDatabaseAccess reportingAccess = new ReportingDatabaseAccess();
 	
 	public Reporting() {
 		try {
@@ -255,7 +259,17 @@ class Reporting {
 	}
 	
 	List<String> notesAndReferences(PersonIdentity person) {
-		return null;
+		if (person == null) {
+			throw new IllegalArgumentException();
+		}
+		List<String> result = new ArrayList<>();
+		try {
+			// Get notes and references
+			reportingAccess.getNotesAndReferences(person, result);
+		} catch (SQLException e) {
+			throw new IllegalStateException(e.getMessage());
+		}
+		return result;
 	}
 	
 	Set<FileIdentifier> findMediaByTag(String tag , String startDate, String endDate) {
