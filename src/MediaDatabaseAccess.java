@@ -3,6 +3,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 
 class MediaDatabaseAccess {
@@ -42,7 +43,7 @@ class MediaDatabaseAccess {
 	}
 	
 	// Links tag and media
-	void linkTagAndMedia(int tagId, int mediaId, String tagName) throws SQLException {
+	void linkTagAndMedia(int tagId, int mediaId, String tagName, Map<String, Integer> tags) throws SQLException {
 		// Set auto commit to false as insertion in both the tables(tag and media_tag)
 		// should complete successfully
 		connection.setAutoCommit(false);
@@ -58,6 +59,7 @@ class MediaDatabaseAccess {
 			
 			// Complete the transaction
 	        connection.commit();
+	        tags.put(tagName, tagId);
 	    } catch (SQLException e) {
 	    	// Roll back on failure
 	        connection.rollback();
@@ -96,7 +98,7 @@ class MediaDatabaseAccess {
 		ps.executeUpdate();
 	}
 	
-	void addMediaAttributes(int fileId, int cityId, String city, String date, String year) throws SQLException {
+	void addMediaAttributes(int fileId, int cityId, String city, String date, String year, Map<String, Integer> cities) throws SQLException {
 		// Set auto commit to false as insertion in both the tables(city and media_attribute)
 		// should complete successfully
 		connection.setAutoCommit(false);
@@ -123,6 +125,7 @@ class MediaDatabaseAccess {
 			
 			// Complete the transaction
 	        connection.commit();
+	        cities.put(city, cityId);
 	    } catch (SQLException e) {
 	    	// Roll back on failure
 	        connection.rollback();

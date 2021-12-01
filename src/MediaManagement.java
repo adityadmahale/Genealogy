@@ -109,7 +109,7 @@ class MediaManagement {
 		
 		try {
 			// Add media attribute
-			mediaAccess.addMediaAttributes(fileIdentifier.getFileId(), cityId, city, date, year);
+			mediaAccess.addMediaAttributes(fileIdentifier.getFileId(), cityId, city, date, year, cities);
 		} catch (SQLException e) {
 			throw new IllegalStateException(e.getMessage());
 		}
@@ -153,7 +153,7 @@ class MediaManagement {
 		
 		try {
 			// Link the tag and media
-			mediaAccess.linkTagAndMedia(tagId, mediaId, tag);
+			mediaAccess.linkTagAndMedia(tagId, mediaId, tag, tags);
 		} catch (SQLException e) {
 			throw new IllegalStateException(e.getMessage());
 		}

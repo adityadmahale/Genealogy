@@ -270,6 +270,16 @@ class Reporting {
 	}
 	
 	Set<FileIdentifier> findMediaByTag(String tag , String startDate, String endDate) {
+		if (tag == null || startDate == null || endDate == null || tag == "" || startDate == "" || endDate == "") {
+			throw new IllegalArgumentException();
+		}
+		
+		if (!Utility.isDateValid(startDate) || !Utility.isDateValid(endDate)) {
+			throw new IllegalArgumentException("Date format is not valid");
+		}
+		
+		
+		
 		return null;
 	}
 	
