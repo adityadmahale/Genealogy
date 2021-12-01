@@ -361,7 +361,28 @@ class Reporting {
 	}
 	
 	List<FileIdentifier> findBiologicalFamilyMedia(PersonIdentity person) {
-		return null;
+		// Handle invalid inputs
+		if (person == null) {
+			throw new IllegalArgumentException();
+		}
+		
+		// Handle when the set size is zero
+		List<FileIdentifier> result = new ArrayList<>();
+		
+		// If no children, then return empty list
+		if (!person.hasChildren()) {
+			return result;
+		}
+		
+		try {
+			// Get media by biological children
+			reportingAccess.getMediaByBiologicalChildren(person, result, files);
+		} catch (SQLException e) {
+			throw new IllegalStateException(e.getMessage());
+		}
+		
+		
+		return result;
 	}
 	
 }

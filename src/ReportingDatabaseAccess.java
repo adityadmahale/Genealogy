@@ -54,6 +54,22 @@ public class ReportingDatabaseAccess {
 			+ "where date is null "
 			+ "order by file_location) b";
 	
+	// Find media by children query
+	private static final String mediaByChildrenQuery = 
+			"with "
+			+ "pim as (select m.file_location, pm.person_id, ma.date "
+			+ "from media m "
+			+ "join person_in_media pm on m.media_id = pm.media_id "
+			+ "left join media_attribute ma on m.media_id = ma.media_id "
+			+ "where pm.person_id in (%s)) "
+			+ "select distinct file_location from (select * from pim "
+			+ "where date is not null "
+			+ "order by date, file_location) a "
+			+ "union "
+			+ "select distinct file_location from (select * from pim "
+			+ "where date is null "
+			+ "order by file_location) b;";
+	
 	// Database connection object
 	private static Connection connection = DatabaseConnection.getConnection();
 	
@@ -116,6 +132,29 @@ public class ReportingDatabaseAccess {
 		
 		// Parse final query
 		String query = String.format(mediaByIndividualsQuery, ids.substring(0, ids.length() - 1), startDate, endDate);
+	    PreparedStatement ps = connection.prepareStatement(query);
+	    // Execute query
+	    ResultSet rs = ps.executeQuery();
+	    
+	    // Add the file identifier to the result list
+	    while (rs.next()) {
+	    	result.add(files.get(rs.getString(COLUMN_FILE_LOCATION)));
+	    }
+	}
+	
+	void getMediaByBiologicalChildren(PersonIdentity person, List<FileIdentifier> result, Map<String, FileIdentifier> files) throws SQLException {
+		// Get the ids of the children
+		StringBuilder sb = new StringBuilder();
+		for (var child: person.getChildren()) {
+			// Otherwise, append the child id
+			sb.append(child.getPersonId()).append(",");
+		}
+		
+		// Get the string
+		String ids = sb.toString();
+		
+		// Parse final query
+		String query = String.format(mediaByChildrenQuery, ids.substring(0, ids.length() - 1));
 	    PreparedStatement ps = connection.prepareStatement(query);
 	    // Execute query
 	    ResultSet rs = ps.executeQuery();
