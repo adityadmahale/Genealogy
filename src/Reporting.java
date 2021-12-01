@@ -269,18 +269,34 @@ class Reporting {
 		return result;
 	}
 	
-	Set<FileIdentifier> findMediaByTag(String tag , String startDate, String endDate) {
+	Set<FileIdentifier> findMediaByTag(String tag, String startDate, String endDate) {
+		// Handle invalid inputs
 		if (tag == null || startDate == null || endDate == null || tag == "" || startDate == "" || endDate == "") {
 			throw new IllegalArgumentException();
 		}
 		
+		// Check if the date for mat is incorrect
 		if (!Utility.isDateValid(startDate) || !Utility.isDateValid(endDate)) {
 			throw new IllegalArgumentException("Date format is not valid");
 		}
 		
+		// Check if the tag exists
+		if (!tags.containsKey(tag)) {
+			throw new IllegalArgumentException("The tag is not available");
+		}
 		
+		// Get tag id
+		int tagId = tags.get(tag);
 		
-		return null;
+		Set<FileIdentifier> result = new HashSet<>();
+		try {
+			// Get media by tags from the database
+			reportingAccess.getMediaByTag(tagId, startDate, endDate, result, files);
+		} catch (SQLException e) {
+			throw new IllegalStateException(e.getMessage());
+		}
+		
+		return result;
 	}
 	
 	Set<FileIdentifier> findMediaByLocation(String location, String startDate, String endDate) {
