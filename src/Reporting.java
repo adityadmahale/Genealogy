@@ -21,6 +21,8 @@ class Reporting {
 	private Map<String, Integer> tags;
 	// Map for storing file location and its corresponding FileIdentifier
 	private Map<String, FileIdentifier> files;
+	// Map for storing city and its corresponding id
+	private Map<String, Integer> cities;
 	
 	// Object for accessing reporting related database tables
 	private ReportingDatabaseAccess reportingAccess = new ReportingDatabaseAccess();
@@ -34,6 +36,7 @@ class Reporting {
 			partnered = PersistentState.getPartners();
 			files = PersistentState.getFiles();
 			tags = PersistentState.getTags();
+			cities = PersistentState.getCities();
 		} catch (SQLException e) {
 			throw new IllegalStateException();
 		}
@@ -275,7 +278,7 @@ class Reporting {
 			throw new IllegalArgumentException();
 		}
 		
-		// Check if the date for mat is incorrect
+		// Check if the date format is incorrect
 		if (!Utility.isDateValid(startDate) || !Utility.isDateValid(endDate)) {
 			throw new IllegalArgumentException("Date format is not valid");
 		}
@@ -300,7 +303,33 @@ class Reporting {
 	}
 	
 	Set<FileIdentifier> findMediaByLocation(String location, String startDate, String endDate) {
-		return null;
+		// Handle invalid inputs
+		if (location == null || startDate == null || endDate == null || location == "" || startDate == "" || endDate == "") {
+			throw new IllegalArgumentException();
+		}
+		
+		// Check if the date format is incorrect
+		if (!Utility.isDateValid(startDate) || !Utility.isDateValid(endDate)) {
+			throw new IllegalArgumentException("Date format is not valid");
+		}
+		
+		// Check if the location exists
+		if (!cities.containsKey(location)) {
+			throw new IllegalArgumentException("Location is not available");
+		}
+		
+		// Get city id
+		int cityId = cities.get(location);
+		
+		Set<FileIdentifier> result = new HashSet<>();
+		try {
+			// Get media by location from the database
+			reportingAccess.getMediaByLocation(cityId, startDate, endDate, result, files);
+		} catch (SQLException e) {
+			throw new IllegalStateException(e.getMessage());
+		}
+		
+		return result;
 	}
 	
 	List<FileIdentifier> findIndividualsMedia(Set<PersonIdentity> people, String startDate, String endDate) {
