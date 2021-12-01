@@ -333,7 +333,31 @@ class Reporting {
 	}
 	
 	List<FileIdentifier> findIndividualsMedia(Set<PersonIdentity> people, String startDate, String endDate) {
-		return null;
+		// Handle invalid inputs
+		if (people == null) {
+			throw new IllegalArgumentException();
+		}
+		
+		// Check if the date format is incorrect
+		if (!Utility.isDateValid(startDate) || !Utility.isDateValid(endDate)) {
+			throw new IllegalArgumentException("Date format is not valid");
+		}
+		
+		// Handle when the set size is zero
+		List<FileIdentifier> result = new ArrayList<>();
+		if (people.size() == 0) {
+			return result;
+		}
+		
+		try {
+			// Get media by individuals
+			reportingAccess.getMediaByIndividuals(people, startDate, endDate, result, files);
+		} catch (SQLException e) {
+			throw new IllegalStateException(e.getMessage());
+		}
+		
+		return result;
+		
 	}
 	
 	List<FileIdentifier> findBiologicalFamilyMedia(PersonIdentity person) {
