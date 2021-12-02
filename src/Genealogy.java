@@ -3,6 +3,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class Genealogy {
+	// Initialize family tree, media and reporting objects
 	FamilyTreeManagement familyTreeManagement = new FamilyTreeManagement();
 	MediaManagement mediaManagement = new MediaManagement();
 	Reporting reporting = new Reporting();

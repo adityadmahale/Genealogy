@@ -14,6 +14,9 @@ class MediaManagement {
 	// Maximum string length of the file location
 	private static final int MAX_FILE_LOCATION_LENGTH = 500;
 	
+	// Maximum string length of the city
+	private static final int MAX_CITY_LENGTH = 50;
+	
 	// Map for storing tag and its corresponding tag id
 	private Map<String, Integer> tags;
 	
@@ -75,9 +78,9 @@ class MediaManagement {
 			throw new IllegalArgumentException();
 		}
 		
-		// If no attributes are passed, then return true
+		// If no attributes are passed, then return false
 		if (attributes.size() == 0) {
-			return true;
+			return false;
 		}
 		
 		boolean isAttributePresent;
@@ -140,8 +143,8 @@ class MediaManagement {
 		
 		// Check if the city value is empty
 		String city = attributes.get(CITY_KEY);
-		if (city == null || city == "") {
-			throw new IllegalArgumentException("The city value cannot be null or empty");
+		if (city == null || city == "" || city.length() > MAX_CITY_LENGTH) {
+			throw new IllegalArgumentException("The city value cannot be null or empty or exceed max length");
 		}
 		
 		// Check the date format

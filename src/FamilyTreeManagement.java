@@ -4,12 +4,26 @@ import java.util.Set;
 
 class FamilyTreeManagement {
 	
+	// Attribute keys
+	private static final String DOB_KEY = "date_of_birth";
+	private static final String DOD_KEY = "date_of_death";
+	private static final String GENDER_KEY = "gender";
+	private static final String LOCATION_OF_BIRTH_KEY = "location_of_birth";
+	private static final String LOCATION_OF_DEATH_KEY = "location_of_death";
+	private static final String OCCUPATION_KEY = "occupation";
+	
 	// Maximum string length of the tag name
 	private static final int MAX_PERSON_NAME_LENGTH = 255;
 	// Maximum string length of the reference
 	private static final int MAX_REFERENCE_LENGTH = 500;
 	// Maximum string length of the note
 	private static final int MAX_NOTE_LENGTH = 500;
+	// Maximum string length of the gender
+	private static final int MAX_GENDER_LENGTH = 1;
+	// Maximum string length of the location
+	private static final int MAX_LOCATION_LENGTH = 255;
+	// Maximum string length of the occupation
+	private static final int MAX_OCCUPATION_LENGTH = 255;
 	
 	// Map for storing name and its corresponding PersonIdentity
 	private Map<String, PersonIdentity> persons;
@@ -21,6 +35,12 @@ class FamilyTreeManagement {
 	// Set for storing partners
 	private Set<PersonIdentity> partnered;
 	
+	// Map for storing location and its corresponding location id
+	private Map<String, Integer> locations;
+	
+	// Map for storing occupation and its corresponding occupation id
+	private Map<String, Integer> occupations;
+	
 	// Object for accessing family tree related database tables
 	private FamilyTreeDatabaseAccess familyTreeAccess = new FamilyTreeDatabaseAccess();
 	
@@ -31,6 +51,8 @@ class FamilyTreeManagement {
 			personIds = PersistentState.getPersonIds();
 			roots = PersistentState.getRoots();
 			partnered = PersistentState.getPartners();
+			locations = PersistentState.getLocations();
+			occupations = PersistentState.getOccupations();
 		} catch (SQLException e) {
 			throw new IllegalStateException();
 		}
@@ -69,7 +91,128 @@ class FamilyTreeManagement {
 	}
 	
 	Boolean recordAttributes(PersonIdentity person, Map<String, String> attributes) {
+		// Handle invalid input for the fileIdentifier
+		if (person == null || attributes == null) {
+			throw new IllegalArgumentException();
+		}
+		
+		// If no attributes are passed, then return false
+		if (attributes.size() == 0) {
+			return false;
+		}
+		
+		boolean isAttributePresent;
+		// Check if the attribute is already present
+		try {
+			isAttributePresent = familyTreeAccess.isAttributePresent(person.getPersonId());
+		} catch (SQLException e) {
+			throw new IllegalStateException(e.getMessage());
+		}
+		
+		// If the attribute is not present, then insert a row
+		// Otherwise, update the existing attributes
+		
+		recordAttributes(person, attributes, isAttributePresent);
+	
 		return true;
+	}
+	
+	private void recordAttributes(PersonIdentity person, Map<String, String> attributes, boolean isAttributePresent) {
+		// Check the date format
+		String dateOfBirth = null;
+		if (attributes.containsKey(DOB_KEY)) {
+			dateOfBirth = attributes.get(DOB_KEY);
+			if (dateOfBirth == null || dateOfBirth == "" || !Utility.isDateValid(dateOfBirth)) {
+				throw new IllegalArgumentException("Date format is incorrect");
+			}
+		}
+		
+		// Check the date format
+		String dateOfDeath = null;
+		if (attributes.containsKey(DOD_KEY)) {
+			dateOfDeath = attributes.get(DOD_KEY);
+			if (dateOfDeath == null || dateOfDeath == "" || !Utility.isDateValid(dateOfDeath)) {
+				throw new IllegalArgumentException("Date format is incorrect");
+			}
+		}
+		
+		// Check the gender
+		String gender = null;
+		if (attributes.containsKey(GENDER_KEY)) {
+			gender = attributes.get(GENDER_KEY);
+			if (gender == null || gender == "" || gender.length() != MAX_GENDER_LENGTH) {
+				throw new IllegalArgumentException("Gender format is incorrect");
+			}
+		}
+		
+		// Check if the location of birth value is empty
+		String locationOfBirth = null;
+		if (attributes.containsKey(LOCATION_OF_BIRTH_KEY)) {
+			locationOfBirth = attributes.get(LOCATION_OF_BIRTH_KEY);
+			if (locationOfBirth == null || locationOfBirth == "" || locationOfBirth.length() > MAX_LOCATION_LENGTH) {
+				throw new IllegalArgumentException("The location value cannot be null or empty or exceed max length");
+			}
+		}
+		
+		// Check if the location of birth value is empty
+		String locationOfDeath = null;
+		if (attributes.containsKey(LOCATION_OF_DEATH_KEY)) {
+			locationOfDeath = attributes.get(LOCATION_OF_DEATH_KEY);
+			if (locationOfDeath == null || locationOfDeath == "" || locationOfDeath.length() > MAX_LOCATION_LENGTH) {
+				throw new IllegalArgumentException("The location value cannot be null or empty or exceed max length");
+			}
+		}
+		
+		// Check if the location of birth value is empty
+		String occupation = null;
+		if (attributes.containsKey(OCCUPATION_KEY)) {
+			occupation = attributes.get(OCCUPATION_KEY);
+			if (occupation == null || occupation == "" || occupation.length() > MAX_OCCUPATION_LENGTH) {
+				throw new IllegalArgumentException("The occupation value cannot be null or empty or exceed max length");
+			}
+		}
+		
+		if (dateOfBirth == null && dateOfDeath == null && gender == null && occupation == null && locationOfBirth == null && locationOfDeath == null) {
+			return;
+		}
+		
+		int locationOfBirthId = getLocationId(locationOfBirth);
+		int locationOfDeathId = getLocationId(locationOfDeath);
+		int occupationId = getOccupationId(occupation);
+		
+		try {
+			if (isAttributePresent) {
+				// Update person attribute
+				familyTreeAccess.updatePersonAttributes(person.getPersonId(), dateOfBirth, dateOfDeath, gender, locationOfBirthId, locationOfBirth, locationOfDeathId, locationOfDeath, occupationId, occupation, locations, occupations);
+			} else {
+				familyTreeAccess.insertPersonAttributes(person.getPersonId(), dateOfBirth, dateOfDeath, gender, locationOfBirthId, locationOfBirth, locationOfDeathId, locationOfDeath, occupationId, occupation, locations, occupations);
+			}
+		} catch (SQLException e) {
+			throw new IllegalStateException(e.getMessage());
+		}
+		
+	}
+
+	//Get the location id corresponding to a location name
+	private int getLocationId(String location) {
+		int locationId = 0;
+		
+		// If the location is already present then get that locationId
+		if (locations.containsKey(location)) {
+			locationId = locations.get(location);
+		}
+		return locationId;
+	}
+	
+	//Get the occupation id corresponding to a occupation name
+	private int getOccupationId(String occupation) {
+		int occupationId = 0;
+		
+		// If the occupation is already present then get that occupationId
+		if (occupations.containsKey(occupation)) {
+			occupationId = occupations.get(occupation);
+		}
+		return occupationId;
 	}
 	
 	Boolean recordReference(PersonIdentity person, String reference) {
