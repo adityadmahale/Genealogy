@@ -75,6 +75,64 @@ class MediaManagement {
 			throw new IllegalArgumentException();
 		}
 		
+		// If no attributes are passed, then return true
+		if (attributes.size() == 0) {
+			return true;
+		}
+		
+		boolean isAttributePresent;
+		// Check if the attribute is already present
+		try {
+			isAttributePresent = mediaAccess.isAttributePresent(fileIdentifier.getFileId());
+		} catch (SQLException e) {
+			throw new IllegalStateException(e.getMessage());
+		}
+		
+		// If the attribute is not present, then insert a row
+		// Otherwise, update the existing attributes
+		if (!isAttributePresent) {
+			insertAttribute(fileIdentifier, attributes);
+		} else {
+			updateAttribute(fileIdentifier, attributes);
+		}
+		
+		return true;
+	}
+	
+	private void updateAttribute(FileIdentifier fileIdentifier, Map<String, String> attributes) {
+		
+		// Check the date format
+		String date = null;
+		if (attributes.containsKey(DATE_KEY)) {
+			date = attributes.get(DATE_KEY);
+			if (date == null || date == "" || !Utility.isDateValid(date)) {
+				throw new IllegalArgumentException("Date format is incorrect");
+			}
+		}
+		
+		// Check the year format
+		String year = null;
+		if (attributes.containsKey(YEAR_KEY)) {
+			year = attributes.get(YEAR_KEY);
+			if (year == null || year == "" || !Utility.isYearValid(year)) {
+				throw new IllegalArgumentException("Year format is incorrect");
+			}
+		}
+		
+		if (year == null && date == null) {
+			return;
+		}
+		
+		try {
+			// Add media attribute
+			mediaAccess.updateMediaAttributes(fileIdentifier.getFileId(), date, year, cities);
+		} catch (SQLException e) {
+			throw new IllegalStateException(e.getMessage());
+		}
+		
+	}
+	
+	private void insertAttribute(FileIdentifier fileIdentifier, Map<String, String> attributes) {
 		// Check for the mandatory parameter
 		if (!attributes.containsKey(CITY_KEY)) {
 			throw new IllegalArgumentException("The city key is mandatory");
@@ -113,8 +171,6 @@ class MediaManagement {
 		} catch (SQLException e) {
 			throw new IllegalStateException(e.getMessage());
 		}
-		
-		return true;
 	}
 	
 	Boolean peopleInMedia(FileIdentifier fileIdentifier, List<PersonIdentity> people) {

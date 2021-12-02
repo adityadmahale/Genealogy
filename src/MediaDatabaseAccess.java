@@ -135,4 +135,26 @@ class MediaDatabaseAccess {
 		connection.setAutoCommit(true);
 	}
 	
+	void updateMediaAttributes(int fileId, String date, String year, Map<String, Integer> cities) throws SQLException {
+		String updateString = "";
+		// Parse date value
+		if (date != null) {
+			updateString += COLUMN_DATE + "='" + date + "',";
+		}
+		// Parse year value
+		if (year != null) {
+			updateString += COLUMN_YEAR + "='" + year + "',";
+		}
+		
+		// Update values
+		String query = String.format("UPDATE %s SET %s WHERE %s=%d", TABLE_MEDIA_ATTRIBUTE, updateString.substring(0, updateString.length() - 1), COLUMN_MEDIA_ID, fileId);
+	    PreparedStatement ps = connection.prepareStatement(query);
+	    ps.executeUpdate();
+	}
+	
+	// Checks if the media attribute is present
+	boolean isAttributePresent(int id) throws SQLException {
+		return QueryUtility.isRowPresent(TABLE_MEDIA_ATTRIBUTE, COLUMN_MEDIA_ID, id);
+	}
+	
 }

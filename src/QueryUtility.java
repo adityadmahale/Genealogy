@@ -59,4 +59,12 @@ class QueryUtility {
 	    PreparedStatement ps = connection.prepareStatement(query);
 	    ps.executeUpdate();
 	}
+	
+	// Checks if the row is present with the given id
+	static boolean isRowPresent(String tableName, String columnName, int id) throws SQLException {
+		String query = String.format("SELECT * FROM %s WHERE %s=%d", tableName, columnName, id);
+	    PreparedStatement ps = connection.prepareStatement(query);
+	    ResultSet rs = ps.executeQuery();
+	    return rs.next();
+	}
 }
