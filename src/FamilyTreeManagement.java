@@ -170,10 +170,12 @@ class FamilyTreeManagement {
 			}
 		}
 		
+		// If the attribute values are not present, then return false
 		if (dateOfBirth == null && dateOfDeath == null && gender == null && occupation == null && locationOfBirth == null && locationOfDeath == null) {
 			return false;
 		}
 		
+		// Get the Ids from the database
 		int locationOfBirthId = getLocationId(locationOfBirth);
 		int locationOfDeathId = getLocationId(locationOfDeath);
 		int occupationId = getOccupationId(occupation);
@@ -260,10 +262,12 @@ class FamilyTreeManagement {
 			throw new IllegalArgumentException("Cannot record child for the same person");
 		}
 		
+		// Check if the parent is already linked to the child
 		if (child.hasParent(parent)) {
 			throw new IllegalArgumentException("The given parent is already linked to the child");
 		}
 		
+		// Check if the child already has two parents
 		if (!child.isParentAdditionAllowed()) {
 			throw new IllegalArgumentException("A child cannot have more than two parents");
 		}
@@ -300,6 +304,7 @@ class FamilyTreeManagement {
 			throw new IllegalArgumentException("Cannot partner the same person");
 		}
 		
+		// Check if the partnering already exists
 		if (partnered.contains(partner1) || partnered.contains(partner2)) {
 			throw new IllegalArgumentException("Partnering already exists for one of the persons/both the persons");
 		}
@@ -333,6 +338,7 @@ class FamilyTreeManagement {
 			throw new IllegalArgumentException("Cannot perform dissolution between the same person");
 		}
 		
+		// Checks if the partnering does not exist
 		if (!arePartners(partner1, partner2)) {
 			throw new IllegalArgumentException("Partnering does not exist between individuals");
 		}

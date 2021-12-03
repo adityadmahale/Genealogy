@@ -22,6 +22,7 @@ public class PersonIdentity {
 		return partner;
 	}
 	
+	// Checks if the individual has a parent
 	boolean hasParent(PersonIdentity parent) {
 		return parents.contains(parent);
 	}
@@ -85,14 +86,17 @@ public class PersonIdentity {
 		rootAncestors.add(person);
 	}
 	
+	// Checks if the parent addition is allowed
 	boolean isParentAdditionAllowed() {
 		return parents.size() < 2;
 	}
 	
+	// Returns root ancestors
 	Set<PersonIdentity> getRootAncestors() {
 		return rootAncestors;
 	}
 	
+	// Checks if the root ancestor is present
 	boolean isRootAncestorPresent(PersonIdentity person) {
 		return rootAncestors.contains(person);
 	}

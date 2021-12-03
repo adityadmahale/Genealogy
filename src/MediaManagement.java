@@ -125,6 +125,7 @@ class MediaManagement {
 			}
 		}
 		
+		// If the required attributes are not present, then return false
 		if (year == null && date == null) {
 			return false;
 		}
