@@ -112,12 +112,10 @@ class FamilyTreeManagement {
 		// If the attribute is not present, then insert a row
 		// Otherwise, update the existing attributes
 		
-		recordAttributes(person, attributes, isAttributePresent);
-	
-		return true;
+		return recordAttributes(person, attributes, isAttributePresent);
 	}
 	
-	private void recordAttributes(PersonIdentity person, Map<String, String> attributes, boolean isAttributePresent) {
+	private boolean recordAttributes(PersonIdentity person, Map<String, String> attributes, boolean isAttributePresent) {
 		// Check the date format
 		String dateOfBirth = null;
 		if (attributes.containsKey(DOB_KEY)) {
@@ -173,7 +171,7 @@ class FamilyTreeManagement {
 		}
 		
 		if (dateOfBirth == null && dateOfDeath == null && gender == null && occupation == null && locationOfBirth == null && locationOfDeath == null) {
-			return;
+			return false;
 		}
 		
 		int locationOfBirthId = getLocationId(locationOfBirth);
@@ -191,6 +189,7 @@ class FamilyTreeManagement {
 			throw new IllegalStateException(e.getMessage());
 		}
 		
+		return true;
 	}
 
 	//Get the location id corresponding to a location name

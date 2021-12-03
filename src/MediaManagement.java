@@ -17,6 +17,9 @@ class MediaManagement {
 	// Maximum string length of the city
 	private static final int MAX_CITY_LENGTH = 50;
 	
+	// Empty attributes size
+	private static final int EMPTY_ATTRIBUTES_SIZE = 0;
+	
 	// Map for storing tag and its corresponding tag id
 	private Map<String, Integer> tags;
 	
@@ -79,7 +82,7 @@ class MediaManagement {
 		}
 		
 		// If no attributes are passed, then return false
-		if (attributes.size() == 0) {
+		if (attributes.size() == EMPTY_ATTRIBUTES_SIZE) {
 			return false;
 		}
 		
@@ -96,13 +99,13 @@ class MediaManagement {
 		if (!isAttributePresent) {
 			insertAttribute(fileIdentifier, attributes);
 		} else {
-			updateAttribute(fileIdentifier, attributes);
+			return updateAttribute(fileIdentifier, attributes);
 		}
 		
 		return true;
 	}
 	
-	private void updateAttribute(FileIdentifier fileIdentifier, Map<String, String> attributes) {
+	private boolean updateAttribute(FileIdentifier fileIdentifier, Map<String, String> attributes) {
 		
 		// Check the date format
 		String date = null;
@@ -123,7 +126,7 @@ class MediaManagement {
 		}
 		
 		if (year == null && date == null) {
-			return;
+			return false;
 		}
 		
 		try {
@@ -132,7 +135,7 @@ class MediaManagement {
 		} catch (SQLException e) {
 			throw new IllegalStateException(e.getMessage());
 		}
-		
+		return true;
 	}
 	
 	private void insertAttribute(FileIdentifier fileIdentifier, Map<String, String> attributes) {
