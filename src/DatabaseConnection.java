@@ -5,6 +5,7 @@ import java.util.Properties;
 
 // Singleton class for getting database connection
 class DatabaseConnection {
+	// Database inputs keys
 	private static final String CONNECTION_STRING_KEY = "connection_string";
 	private static final String USERNAME_KEY = "username";
 	private static final String PASSWORD_KEY = "password";

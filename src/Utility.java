@@ -49,6 +49,7 @@ class Utility {
         return true;
     }
 	
+	// Load database inputs from the properties file
 	static Properties loadDatabaseInputs() {
 		Properties properties = new Properties();
 		try {
