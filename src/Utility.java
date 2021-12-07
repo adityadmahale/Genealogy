@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 
 class Utility {
@@ -36,6 +37,25 @@ class Utility {
         }
         return true;
     }
+	
+	// Check if the date range is correct
+	static boolean isDateRangeCorrect(String start, String end) {
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			Date startDate = format.parse(start);
+			Date endDate = format.parse(end);
+			
+			// Check if start date is after the end date
+			if (startDate.compareTo(endDate) > 0) {
+				return false;
+			} else {
+				return true;
+			}
+			
+		} catch (ParseException e) {
+			return false;
+		}
+	}
 	
 	// Checks if the date format is correct
 	static boolean isYearValid(String date) {

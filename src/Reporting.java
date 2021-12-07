@@ -283,6 +283,11 @@ class Reporting {
 			throw new IllegalArgumentException("Date format is not valid");
 		}
 		
+		// Check the dates
+		if (!Utility.isDateRangeCorrect(startDate, endDate)) {
+			throw new IllegalArgumentException("Start date is later than the end date");
+		}
+		
 		// Check if the tag exists
 		if (!tags.containsKey(tag)) {
 			throw new IllegalArgumentException("The tag is not available");
@@ -313,6 +318,11 @@ class Reporting {
 			throw new IllegalArgumentException("Date format is not valid");
 		}
 		
+		// Check the dates
+		if (!Utility.isDateRangeCorrect(startDate, endDate)) {
+			throw new IllegalArgumentException("Start date is later than the end date");
+		}
+		
 		// Check if the location exists
 		if (!cities.containsKey(location)) {
 			throw new IllegalArgumentException("Location is not available");
@@ -341,6 +351,11 @@ class Reporting {
 		// Check if the date format is incorrect
 		if (!Utility.isDateValid(startDate) || !Utility.isDateValid(endDate)) {
 			throw new IllegalArgumentException("Date format is not valid");
+		}
+		
+		// Check the dates
+		if (!Utility.isDateRangeCorrect(startDate, endDate)) {
+			throw new IllegalArgumentException("Start date is later than the end date");
 		}
 		
 		// Handle when the set size is zero
