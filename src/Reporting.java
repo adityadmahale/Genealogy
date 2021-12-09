@@ -274,17 +274,22 @@ class Reporting {
 	
 	Set<FileIdentifier> findMediaByTag(String tag, String startDate, String endDate) {
 		// Handle invalid inputs
-		if (tag == null || startDate == null || endDate == null || tag == "" || startDate == "" || endDate == "") {
+		if (tag == null || tag == "" || startDate == "" || endDate == "") {
 			throw new IllegalArgumentException();
 		}
 		
-		// Check if the date format is incorrect
-		if (!Utility.isDateValid(startDate) || !Utility.isDateValid(endDate)) {
-			throw new IllegalArgumentException("Date format is not valid");
+		// Check if the start date format is correct
+		if (startDate != null && !Utility.isDateValid(startDate)) {
+			throw new IllegalArgumentException("Start date format is not valid. It should be in the yyyy-MM-dd format.");
+		}
+		
+		// Check if the end date format is correct
+		if (endDate != null && !Utility.isDateValid(endDate)) {
+			throw new IllegalArgumentException("End date format is not valid. It should be in the yyyy-MM-dd format.");
 		}
 		
 		// Check the dates
-		if (!Utility.isDateRangeCorrect(startDate, endDate)) {
+		if (startDate != null && endDate != null && !Utility.isDateRangeCorrect(startDate, endDate)) {
 			throw new IllegalArgumentException("Start date is later than the end date");
 		}
 		
@@ -309,17 +314,22 @@ class Reporting {
 	
 	Set<FileIdentifier> findMediaByLocation(String location, String startDate, String endDate) {
 		// Handle invalid inputs
-		if (location == null || startDate == null || endDate == null || location == "" || startDate == "" || endDate == "") {
+		if (location == null || location == "" || startDate == "" || endDate == "") {
 			throw new IllegalArgumentException();
 		}
 		
-		// Check if the date format is incorrect
-		if (!Utility.isDateValid(startDate) || !Utility.isDateValid(endDate)) {
-			throw new IllegalArgumentException("Date format is not valid");
+		// Check if the start date format is correct
+		if (startDate != null && !Utility.isDateValid(startDate)) {
+			throw new IllegalArgumentException("Start date format is not valid. It should be in the yyyy-MM-dd format.");
+		}
+		
+		// Check if the end date format is correct
+		if (endDate != null && !Utility.isDateValid(endDate)) {
+			throw new IllegalArgumentException("End date format is not valid. It should be in the yyyy-MM-dd format.");
 		}
 		
 		// Check the dates
-		if (!Utility.isDateRangeCorrect(startDate, endDate)) {
+		if (startDate != null && endDate != null && !Utility.isDateRangeCorrect(startDate, endDate)) {
 			throw new IllegalArgumentException("Start date is later than the end date");
 		}
 		
@@ -348,13 +358,18 @@ class Reporting {
 			throw new IllegalArgumentException();
 		}
 		
-		// Check if the date format is incorrect
-		if (!Utility.isDateValid(startDate) || !Utility.isDateValid(endDate)) {
-			throw new IllegalArgumentException("Date format is not valid");
+		// Check if the start date format is correct
+		if (startDate != null && !Utility.isDateValid(startDate)) {
+			throw new IllegalArgumentException("Start date format is not valid. It should be in the yyyy-MM-dd format.");
+		}
+		
+		// Check if the end date format is correct
+		if (endDate != null && !Utility.isDateValid(endDate)) {
+			throw new IllegalArgumentException("End date format is not valid. It should be in the yyyy-MM-dd format.");
 		}
 		
 		// Check the dates
-		if (!Utility.isDateRangeCorrect(startDate, endDate)) {
+		if (startDate != null && endDate != null && !Utility.isDateRangeCorrect(startDate, endDate)) {
 			throw new IllegalArgumentException("Start date is later than the end date");
 		}
 		
